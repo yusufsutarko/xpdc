@@ -37,6 +37,8 @@ import com.sma.validator.TransaksiPaymentValidator;
 /**
  * Controller untuk Transaksi Payment STT
  * 
+ * test comment di github nih cup
+ * 
  * @author Yusuf
  * @since Aug 5, 2013 (9:34:50 AM)
  *
