@@ -45,6 +45,8 @@ import com.sma.validator.TransaksiSTTValidator;
 @RequestMapping("/transaksi/stt")
 public class TransaksiSTTController extends ParentController {
 
+	//test comment doang
+	
 	@Autowired
 	protected TransaksiSTTValidator validator;		
 
