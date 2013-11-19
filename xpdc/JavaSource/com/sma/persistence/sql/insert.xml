@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sma.persistence.DbMapper">
+		
+	<insert id="insertUser" parameterType="User" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		INSERT INTO lst_user 
+			(cabang_id, username, password, group_user_id, flag_approval, flag_akses_all, nik, nama, email, dob, lastlogin, active, createby, createdate) 
+		VALUES 
+			(#{cabang_id}, #{username}, AES_ENCRYPT(#{password}, 'suksesmakmurangkutan'), #{group_user_id}, #{flag_approval}, #{flag_akses_all}, #{nik}, #{nama}, #{email}, #{dob}, #{lastlogin}, #{active}, #{createby}, #{createdate})
+		<selectKey keyProperty="id" resultType="int" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+	<insert id="insertGroupUser" parameterType="GroupUser" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		INSERT INTO lst_group_user 
+			(nama) 
+		VALUES 
+			(#{nama})
+		<selectKey keyProperty="id" resultType="int" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+	<insert id="insertHakAkses" parameterType="HakAkses">
+		INSERT INTO lst_hak_akses 
+			(group_user_id, menu_id, active) 
+		VALUES 
+			(#{group_user_id}, #{menu_id}, #{active})
+	</insert>
+		
+	<insert id="insertSupir" parameterType="Supir" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		INSERT INTO lst_supir 
+			(nama, tgl_mulai, tgl_berakhir, active, createby, createdate) 
+		VALUES 
+			(#{nama}, #{tgl_mulai}, #{tgl_berakhir}, #{active}, #{createby}, #{createdate})
+		<selectKey keyProperty="id" resultType="int" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+	<insert id="insertCustomer" parameterType="Customer" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		INSERT INTO mst_customer
+			(kode, type, nama, alamat, kota, contact, no_telp, no_hp, email, no_fax, limit_hutang, due_date, active, createby, createdate) 
+		VALUES 
+			(#{kode}, #{type}, #{nama}, #{alamat}, #{kota}, #{contact}, #{no_telp}, #{no_hp}, #{email}, #{no_fax}, #{limit_hutang}, #{due_date}, #{active}, #{createby}, #{createdate})
+		<selectKey keyProperty="id" resultType="int" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+		
+	<insert id="insertBarang" parameterType="Barang" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		INSERT INTO lst_barang 
+			(nama, active, createby, createdate) 
+		VALUES 
+			(#{nama}, #{active}, #{createby}, #{createdate})
+		<selectKey keyProperty="id" resultType="int" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+		
+	<insert id="insertMobil" parameterType="Mobil">
+		INSERT INTO lst_mobil 
+			(no_polisi, jenis, km_awal, harga, active, createby, createdate) 
+		VALUES 
+			(#{no_polisi}, #{jenis}, #{km_awal}, #{harga}, #{active}, #{createby}, #{createdate})
+	</insert>
+		
+	<insert id="insertKapal" parameterType="Kapal">
+		INSERT INTO lst_kapal 
+			(kode, nama, jenis, harga, active, createby, createdate) 
+		VALUES 
+			(#{kode}, #{nama}, #{jenis}, #{harga}, #{active}, #{createby}, #{createdate})
+	</insert>
+		
+	<insert id="insertHarga" parameterType="Harga">
+		INSERT INTO lst_harga	
+			(customer_id, barang_id, harga, active, createby, createdate) 
+		VALUES 
+			(#{customer_id}, #{barang_id}, #{harga}, #{active}, #{createby}, #{createdate})
+	</insert>
+		
+	<insert id="insertCabang" parameterType="Cabang" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		INSERT INTO lst_cabang
+			(kode, nama, active, createby, createdate) 
+		VALUES 
+			(#{kode}, #{nama}, #{active}, #{createby}, #{createdate})
+		<selectKey keyProperty="id" resultType="int" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+	<insert id="insertTrans" parameterType="Trans" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		INSERT INTO mst_trans
+		(cabang_id, customer_id, tgl_stt, tgl_kirim_est, pay_mode, colly, tujuan_id, contact_tujuan, alamat_tujuan, telp_tujuan, note, total_harga, potongan, remain, createby, createdate)
+		VALUES
+		(#{cabang_id}, #{customer_id}, #{tgl_stt}, #{tgl_kirim_est}, #{pay_mode}, #{colly}, #{tujuan_id}, #{contact_tujuan}, #{alamat_tujuan}, #{telp_tujuan}, #{note}, #{total_harga}, #{potongan}, #{remain}, #{createby}, #{createdate});
+		<selectKey keyProperty="id" resultType="int" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+	
+	<insert id="insertMenu" parameterType="Menu" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		INSERT INTO LST_MENU 
+		(parent, nama, link, urut, level, path, active, createby, createdate) 
+		VALUES 
+		(#{parent}, upper(#{nama}), #{link}, #{urut}, #{level}, upper(#{path}), #{active}, #{createby}, #{createdate})
+		<selectKey keyProperty="id" resultType="int" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+	<insert id="insertTransDet" parameterType="TransDet">
+		INSERT INTO mst_trans_det
+		(trans_id, urut, nama_barang, satuan_id, qty, harga, colly_remain, colly)
+		VALUES
+		(#{trans_id}, #{urut}, #{nama_barang}, #{satuan_id}, #{qty}, #{harga}, #{colly_remain}, #{colly})
+	</insert>
+	
+	<insert id="insertDelivery" parameterType="Delivery" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		INSERT INTO mst_delivery
+		(id, tgl_kirim, tgl_sampai, no_polisi, supir_id, kode_kapal, createby, createdate)
+		VALUES 
+		(#{id}, #{tgl_kirim}, #{tgl_sampai}, #{no_polisi}, #{supir_id}, #{kode_kapal}, #{createby}, #{createdate}) 
+		<selectKey keyProperty="id" resultType="int" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+	
+	<insert id="insertDeliveryDet" parameterType="DeliveryDet">
+		INSERT INTO mst_delivery_det 
+		(delivery_id, trans_id, trans_urut, colly_naik, colly_sisa, note, nominal) 
+		VALUES 
+		(#{delivery_id}, #{trans_id}, #{trans_urut}, #{colly_naik}, #{colly_sisa}, #{note}, #{nominal}) 
+	</insert>
+		
+	<insert id="insertBiaya" parameterType="Biaya" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		INSERT INTO lst_biaya
+			(nama, nominal, active, createby, createdate) 
+		VALUES 
+			(#{nama}, #{nominal}, #{active}, #{createby}, #{createdate})
+		<selectKey keyProperty="id" resultType="int" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>	
+	
+	<insert id="insertDeliveryCost" parameterType="DeliveryCost">
+		INSERT INTO mst_delivery_cost
+		(delivery_id, biaya_id, note, nominal) 
+		VALUES 
+		(#{delivery_id}, #{biaya_id}, #{note}, #{nominal}) 
+	</insert>
+		
+	<insert id="insertPayment" parameterType="Payment" useGeneratedKeys="true" keyColumn="payment_id" keyProperty="payment_id">
+		INSERT INTO mst_payment
+		(trans_id, paid_date, dk, pay_mode, nominal, no_giro, due_date, keterangan, createby, createdate)
+		VALUES
+		(#{trans_id}, #{paid_date}, #{dk}, #{pay_mode}, #{nominal}, #{no_giro}, #{due_date}, #{keterangan}, #{createby}, #{createdate})
+		<selectKey keyProperty="payment_id" resultType="int" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+		
+</mapper>

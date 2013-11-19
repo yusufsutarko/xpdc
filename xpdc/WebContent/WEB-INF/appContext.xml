@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans	xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:context="http://www.springframework.org/schema/context"
+		xmlns:p="http://www.springframework.org/schema/p"
+		xmlns:task="http://www.springframework.org/schema/task"
+		xmlns:tx="http://www.springframework.org/schema/tx"
+		xmlns:util="http://www.springframework.org/schema/util"
+		xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+			http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+			http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+	<!-- ================================ SETTING UMUM ================================ -->
+
+	<!-- file properties (agar bisa digunakan di bean2) -->
+	<util:properties id="props" location="classpath:app.properties" />
+
+	<!-- Property placeholder (agar bisa digunakan dalam bentuk ${nama} di semua spring xml). Bisa lebih dari 1 properties -->
+ 	<context:property-placeholder location="classpath:app.properties"/>
+
+	<!-- exception handling, bila terjadi error -->
+	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerExceptionResolver" p:order="1" /> <!-- pertama, cek dulu apakah ada @ExceptionHandler di masing2 controller -->
+	<bean class="com.sma.utils.ExceptionResolver" p:order="2" /> <!-- kedua, baru gunakan exception handler -->
+
+	<!-- auto-discover semua annotated @Component (scheduler, emailer, sessionregistry, dll) lalu daftarkan semua sebagai beans -->
+	<context:component-scan base-package="com.sma.utils" />
+
+	<!-- message source, untuk fitur i18n dan error messages -->
+	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource" p:basename="/WEB-INF/messages" />
+
+	<!-- initOnStartup (bean buatan sendiri untuk beberapa function yg mau dijalankan diawal, contoh: report compiler) -->
+	<bean name="initOnStartup" class="com.sma.utils.InitOnStartup">
+		<constructor-arg name="props" ref="props" />
+		<constructor-arg name="servletContext" ref="servletContext" />
+	</bean>
+	
+	<!-- ================================ SETTING EMAIL ================================ -->
+	
+	<!-- mailSender (digunakan oleh class id.co.ajsmsig.eagency.utils.Emailer) -->
+	<bean name="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl"
+		p:host="${email.host}"
+		p:port="${email.port}"
+		p:protocol="${email.protocol}"
+		p:username="${email.username}"
+		p:password="${email.password}" 
+		p:javaMailProperties-ref="mailProperties" />
+	
+	<util:properties id="mailProperties">
+        <prop key="mail.smtp.auth">${email.auth}</prop>
+        <prop key="mail.smtp.starttls.enable">${email.starttls}</prop>
+        <prop key="mail.smtp.quitwait">${email.quitwait}</prop>
+	</util:properties>
+	
+	<!-- ================================ KONEKSI DATABASE ================================ -->
+
+	<!-- Data Source (menggunakan connection pooling dari BoneCP) -->
+	<bean id="mysqlDataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close"
+ 		p:driverClass="com.mysql.jdbc.Driver"
+ 		p:jdbcUrl="jdbc:mysql://localhost:3306/ekspedisi?autoReconnect=true"
+ 		p:username="dev"
+ 		p:password="linkdev"
+ 		p:idleConnectionTestPeriodInMinutes="60"
+ 		p:idleMaxAgeInMinutes="240"
+ 		p:maxConnectionsPerPartition="30"
+ 		p:minConnectionsPerPartition="10"
+ 		p:partitionCount="3"
+ 		p:acquireIncrement="5"
+ 		p:statementsCacheSize="100"
+ 		p:releaseHelperThreads="3" />
+
+	<!-- Spring transaction manager -->
+ 	<bean id="mysqlTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" 
+		p:dataSource-ref="mysqlDataSource" /> 
+
+	<!-- Service object yang bersifat transactional --> 
+	<bean id="mysqlService" class="com.sma.service.DbService" /> 
+
+	<!-- enable transaction demarcation with annotations --> 
+	<tx:annotation-driven transaction-manager="mysqlTransactionManager"/> 
+
+	<!-- MyBatis session factory -->
+	<!-- p:mapperLocations = lokasi sql map -->
+	<!-- p:typeAliasesPackage = semua domain object yang ada disini sudah tidak perlu didefine satu per satu di sql map -->
+	<bean id="mysqlSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean"
+		p:dataSource-ref="mysqlDataSource"
+		p:mapperLocations="classpath*:com/sma/persistence/**/*.xml"
+		p:typeAliasesPackage="com.sma.model" />
+
+	<!-- scan for mappers and let them be autowired --> 
+	<!-- p:basePackage = scan semua mapper disini -->
+	<bean id="mysqlMapperScanner" class="org.mybatis.spring.mapper.MapperScannerConfigurer" 
+		p:basePackage="com.sma.persistence"
+		p:sqlSessionFactory-ref="mysqlSqlSessionFactory" />
+	
+</beans>

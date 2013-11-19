@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created using JasperAssistant (http://www.jasperassistant.com) -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report_rbt_det_biaya" pageWidth="400" pageHeight="595" orientation="Landscape" columnWidth="400" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" scriptletClass="com.sma.utils.JasperScriptlet">
+	<property name="com.jasperassistant.designer.DataSource" value="xpdc"/>
+	<property name="com.jasperassistant.designer.Grid" value="false"/>
+	<property name="com.jasperassistant.designer.SnapToGrid" value="false"/>
+	<property name="com.jasperassistant.designer.GridWidth" value="12"/>
+	<property name="com.jasperassistant.designer.GridHeight" value="12"/>
+	<parameter name="delivery_id" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[new Integer(2)]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT a.*, b.nama namabiaya
+FROM mst_delivery_cost a, lst_biaya b
+WHERE a.biaya_id = b.id
+AND a.delivery_id = $P{delivery_id}
+;]]>
+	</queryString>
+	<field name="biaya_id" class="java.lang.Integer"/>
+	<field name="delivery_id" class="java.lang.Integer"/>
+	<field name="namabiaya" class="java.lang.String"/>
+	<field name="nominal" class="java.math.BigDecimal"/>
+	<field name="note" class="java.lang.String"/>
+	<variable name="tot_nominal" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{nominal}]]></variableExpression>
+	</variable>
+	<detail>
+		<band height="20">
+			<textField pattern="#,##0.00#" hyperlinkType="None">
+				<reportElement x="150" y="0" width="116" height="20"/>
+				<box padding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{nominal}]]></textFieldExpression>
+			</textField>
+			<textField hyperlinkType="None">
+				<reportElement x="0" y="0" width="150" height="20"/>
+				<box padding="3">
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{namabiaya}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="27">
+			<textField pattern="#,##0.00#" hyperlinkType="None">
+				<reportElement x="150" y="1" width="116" height="20"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{tot_nominal}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="1" width="150" height="20"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+		</band>
+	</columnFooter>
+	<summary>
+		<band height="4"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created using JasperAssistant (http://www.jasperassistant.com) -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report_rbt_det_barang" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="842" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" scriptletClass="com.sma.utils.JasperScriptlet">
+	<property name="com.jasperassistant.designer.DataSource" value="xpdc"/>
+	<property name="com.jasperassistant.designer.Grid" value="false"/>
+	<property name="com.jasperassistant.designer.SnapToGrid" value="false"/>
+	<property name="com.jasperassistant.designer.GridWidth" value="12"/>
+	<property name="com.jasperassistant.designer.GridHeight" value="12"/>
+	<parameter name="delivery_id" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[new Integer(2)]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT a.*, td.nama_barang, td.colly, e.nama nama_customer, f.nama nama_cabang, t.no_stt
+FROM mst_delivery_det a, mst_trans_det td, mst_trans t
+LEFT JOIN mst_customer e ON t.customer_id = e.id
+LEFT JOIN lst_cabang f ON t.cabang_id = f.id
+WHERE a.trans_id = td.trans_id
+AND a.trans_urut = td.urut
+AND td.trans_id = t.id
+AND a.delivery_id = $P{delivery_id}
+;]]>
+	</queryString>
+	<field name="colly" class="java.math.BigDecimal"/>
+	<field name="colly_naik" class="java.math.BigDecimal"/>
+	<field name="colly_sampai" class="java.math.BigDecimal"/>
+	<field name="colly_sisa" class="java.math.BigDecimal"/>
+	<field name="delivery_id" class="java.lang.Integer"/>
+	<field name="nama_barang" class="java.lang.String"/>
+	<field name="nama_cabang" class="java.lang.String"/>
+	<field name="nama_customer" class="java.lang.String"/>
+	<field name="no_stt" class="java.lang.String"/>
+	<field name="nominal" class="java.math.BigDecimal"/>
+	<field name="note" class="java.lang.String"/>
+	<field name="note_delivery" class="java.lang.String"/>
+	<field name="trans_id" class="java.lang.Integer"/>
+	<field name="trans_urut" class="java.lang.Integer"/>
+	<variable name="tot_col_naik" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{colly_naik}]]></variableExpression>
+	</variable>
+	<variable name="tot_col_sisa" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{colly_sisa}]]></variableExpression>
+	</variable>
+	<variable name="tot_nominal" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{nominal}]]></variableExpression>
+	</variable>
+	<detail>
+		<band height="20">
+			<textField>
+				<reportElement x="253" y="0" width="157" height="20"/>
+				<box>
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{nama_barang}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="410" y="0" width="89" height="20"/>
+				<box padding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{colly_naik}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="499" y="0" width="89" height="20"/>
+				<box padding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{colly_sisa}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#">
+				<reportElement x="588" y="0" width="116" height="20"/>
+				<box padding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{nominal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="100" height="20"/>
+				<box>
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{no_stt}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="0" width="153" height="20"/>
+				<box>
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{nama_customer}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="27">
+			<textField pattern="#,##0">
+				<reportElement x="410" y="1" width="89" height="20"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{tot_col_naik}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="499" y="1" width="89" height="20"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{tot_col_sisa}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#">
+				<reportElement x="588" y="1" width="116" height="20"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{tot_nominal}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="253" y="1" width="157" height="20"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total : ]]></text>
+			</staticText>
+		</band>
+	</columnFooter>
+	<summary>
+		<band height="4"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created using JasperAssistant (http://www.jasperassistant.com) -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report_tagihan_det" pageWidth="612" pageHeight="791" columnWidth="612" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" scriptletClass="com.sma.utils.JasperScriptlet">
+	<property name="com.jasperassistant.designer.Grid" value="false"/>
+	<property name="com.jasperassistant.designer.SnapToGrid" value="false"/>
+	<property name="com.jasperassistant.designer.GridWidth" value="12"/>
+	<property name="com.jasperassistant.designer.GridHeight" value="12"/>
+	<property name="com.jasperassistant.designer.DataSource" value="xpdc"/>
+	<parameter name="trans_id" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[new Integer(2)]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT ad.urut, ad.nama_barang, g.keterangan satuan, ad.qty qty_detail, ad.harga harga_detail, ad.colly colly_detail
+FROM mst_trans_det ad
+	 LEFT JOIN lst_config g ON ad.satuan_id = g.jenis AND g.id = 3
+WHERE ad.trans_id = $P{trans_id}
+ORDER BY ad.urut
+;]]>
+	</queryString>
+	<field name="colly_detail" class="java.math.BigDecimal"/>
+	<field name="harga_detail" class="java.math.BigDecimal"/>
+	<field name="nama_barang" class="java.lang.String"/>
+	<field name="qty_detail" class="java.math.BigDecimal"/>
+	<field name="satuan" class="java.lang.String"/>
+	<field name="urut" class="java.lang.Integer"/>
+	<variable name="tot_harga" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[new BigDecimal($F{qty_detail}.doubleValue() * $F{harga_detail}.doubleValue())]]></variableExpression>
+	</variable>
+	<title>
+		<band/>
+	</title>
+	<detail>
+		<band height="33">
+			<textField>
+				<reportElement x="0" y="1" width="44" height="16"/>
+				<box>
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{colly_detail}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="44" y="1" width="215" height="16"/>
+				<box topPadding="0" leftPadding="2" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{nama_barang}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.##">
+				<reportElement x="282" y="1" width="105" height="16"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="2">
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{tot_harga}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="259" y="1" width="23" height="16"/>
+				<box topPadding="0" leftPadding="1" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="11" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Rp.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="44" y="17" width="215" height="16"/>
+				<box topPadding="0" leftPadding="2" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="none"/>
+				<textFieldExpression class="java.lang.String"><![CDATA["( " + $F{qty_detail} + " " + $F{satuan} + " x Rp. " + $P{REPORT_SCRIPTLET}.formatNumber($F{harga_detail}) + " )"
+
+]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="17" width="44" height="16"/>
+				<box>
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="259" y="17" width="128" height="16"/>
+				<box>
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band/>
+	</pageFooter>
+</jasperReport>

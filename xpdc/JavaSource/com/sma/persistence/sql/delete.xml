@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sma.persistence.DbMapper">
+
+	<delete id="deleteHakAkses" parameterType="Integer">
+		delete from lst_hak_akses where group_user_id = #{value}
+	</delete>
+	
+	<delete id="deleteDeliveryCost" parameterType="Integer">
+		delete from mst_delivery_cost where delivery_id = #{value}
+	</delete>
+	
+	<delete id="deleteTransDet" parameterType="TransDet">
+		DELETE FROM mst_trans_det
+		WHERE trans_id = #{trans_id} AND urut = #{urut}
+	</delete>
+	
+	<delete id="deleteDeliveryDet" parameterType="DeliveryDet">
+		DELETE FROM mst_delivery_det
+		WHERE delivery_id = #{delivery_id} AND trans_id = #{trans_id} AND trans_urut = #{trans_urut}		
+	</delete>
+	
+</mapper>

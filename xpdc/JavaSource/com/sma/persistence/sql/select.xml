@@ -1,0 +1,822 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sma.persistence.DbMapper">
+
+	<select id="selectSysdate" parameterType="String" resultType="Date" useCache="false">
+		SELECT sysdate()
+	</select>
+
+	<select id="selectTestDB" resultType="Int">
+		SELECT jenis FROM mst_master WHERE id = 0
+	</select>
+
+	<select id="selectDropDown" resultType="DropDown">
+		SELECT ${key} "key", ${value} "value" FROM ${table} 
+		<if test="where != null"> 
+			WHERE ${where}
+		</if>
+		ORDER BY ${order}
+	</select>
+	
+	<select id="selectMenuAkses" resultType="Menu">
+		SELECT child.parent, parent.nama parent_nama, parent.link parent_link, 
+			   child.id, child.nama, child.link, child.urut, case when akses.active is null then 0 else akses.active end active
+		FROM lst_menu child 
+		INNER JOIN lst_menu parent ON child.parent = parent.id
+		LEFT OUTER JOIN (SELECT * FROM lst_group_user g, lst_hak_akses h WHERE g.id = h.group_user_id AND g.id = #{group_user_id}) akses ON child.id = akses.menu_id
+		WHERE child.active = 1
+		ORDER BY child.parent, child.urut;
+	</select>
+	
+	<select id="selectUser" resultType="User">
+		SELECT 
+			u.*, c.username createuser, m.username modifyuser,
+			cab.nama cabang
+		FROM lst_user u
+		LEFT OUTER JOIN lst_user c ON u.createby = c.id
+		LEFT OUTER JOIN lst_user m ON u.modifyby = m.id
+		LEFT OUTER JOIN lst_cabang cab ON u.cabang_id = cab.id
+		<choose>
+			<when test="username != null">WHERE u.username = #{username}</when>
+			<when test="id != null">WHERE u.id = #{id}</when>
+		</choose>
+		<if test="password != null">
+			AND u.password = AES_ENCRYPT(#{password}, 'suksesmakmurangkutan')
+		</if>
+	</select>
+	
+	<select id="selectListUser" resultType="User">
+		SELECT * FROM lst_user 
+		<if test="search != null">
+			WHERE UPPER(username) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%')
+		</if>
+		ORDER BY cabang_id, username
+		LIMIT #{offset}, #{rowcount}
+	</select>
+
+	<select id="selectListUserCount" resultType="Int">
+		SELECT count(*) FROM lst_user 
+		<if test="search != null">
+			WHERE UPPER(username) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%')
+		</if>
+	</select>
+	
+	<select id="selectGroupUser" resultType="GroupUser">
+		SELECT gu.* 
+		FROM lst_group_user gu
+		<if test="id != null">WHERE gu.id = #{id}</if>
+	</select>
+	
+	<select id="selectListGroupUser" resultType="GroupUser">
+		SELECT * FROM lst_group_user 
+		<if test="search != null">
+			WHERE UPPER(nama) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%')
+		</if>
+		ORDER BY nama
+		LIMIT #{offset}, #{rowcount}
+	</select>
+
+	<select id="selectListGroupUserCount" resultType="Int">
+		SELECT count(*) FROM lst_group_user 
+		<if test="search != null">
+			WHERE UPPER(nama) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%')
+		</if>
+	</select>
+	
+	<select id="selectListHakAkses" resultType="HakAkses">
+		SELECT 
+			akses.group_user_id, m.id menu_id, m.nama, IFNULL(akses.active, 0) active, m.urut, m.parent, parent.nama parent_nama
+		FROM lst_menu m
+		INNER JOIN lst_menu parent ON m.parent = parent.id
+		LEFT OUTER JOIN (SELECT * FROM lst_group_user g, lst_hak_akses h WHERE g.id = h.group_user_id AND g.id = #{id}) akses ON m.id = akses.menu_id
+		WHERE m.parent > 1
+		ORDER BY m.parent, m.urut
+	</select>
+	
+	<select id="selectSupir" resultType="Supir">
+		SELECT 
+			s.*, c.username createuser, m.username modifyuser 
+		FROM lst_supir s
+		LEFT OUTER JOIN lst_user c ON s.createby = c.id
+		LEFT OUTER JOIN lst_user m ON s.modifyby = m.id
+		<if test="id != null">
+			WHERE s.id = #{id}
+		</if>
+	</select>
+	
+	<select id="selectListSupir" resultType="Supir">
+		SELECT * FROM lst_supir s
+		<if test="search != null">
+			WHERE (s.id LIKE CONCAT('%', UPPER(TRIM(#{search})), '%') OR
+				   s.nama LIKE CONCAT('%', UPPER(TRIM(#{search})), '%') )
+		</if>
+		ORDER BY s.nama
+		LIMIT #{offset}, #{rowcount}
+	</select>
+
+	<select id="selectListSupirCount" resultType="Int">
+		SELECT count(*) FROM lst_supir s
+		<if test="search != null">
+			WHERE (s.id LIKE CONCAT('%', UPPER(TRIM(#{search})), '%') OR
+				   s.nama LIKE CONCAT('%', UPPER(TRIM(#{search})), '%') )
+		</if>
+	</select>
+
+	<select id="selectNamaSupirCount" resultType="Int">
+		SELECT count(*) FROM lst_supir s
+		WHERE UPPER(s.nama) = UPPER(TRIM(#{search}))
+	</select>
+	
+	<select id="selectCustomer" resultType="Customer">
+		SELECT * 
+		FROM mst_customer
+		WHERE id = #{id}
+	</select>
+	
+	<select id="selectListCustomer" resultType="Customer">
+		SELECT a.*, a.nama value FROM mst_customer a 
+		<if test="search != null">
+			WHERE UPPER(a.nama) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%')
+		</if>
+		ORDER BY a.nama
+		<if test="offset != null">
+			LIMIT #{offset}, #{rowcount}
+		</if>
+	</select>
+	
+	<select id="selectListPengirim" resultType="Customer">
+		SELECT a.*, a.nama value FROM mst_customer a 
+		WHERE UPPER(a.nama) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%') 
+		AND a.type=0
+		ORDER BY a.nama
+		<if test="offset != null">
+			LIMIT #{offset}, #{rowcount}
+		</if>
+	</select>
+	
+	<select id="selectListPenerima" resultType="Customer">
+		SELECT a.*, a.nama value FROM mst_customer a 
+		WHERE UPPER(a.nama) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%') 
+		AND a.type=1
+		ORDER BY a.nama
+		<if test="offset != null">
+			LIMIT #{offset}, #{rowcount}
+		</if>
+	</select>
+
+	<select id="selectListCustomerCount" resultType="Int">
+		SELECT count(*) FROM mst_customer 
+		<if test="search != null">
+			WHERE UPPER(nama) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%')
+		</if>
+	</select>
+	
+	<select id="selectBarang" resultType="Barang">
+		SELECT 
+			b.*, c.username createuser, m.username modifyuser 
+		FROM lst_barang b
+		LEFT OUTER JOIN lst_user c ON b.createby = c.id
+		LEFT OUTER JOIN lst_user m ON b.modifyby = m.id
+		<if test="id != null">
+			WHERE b.id = #{id}
+		</if>
+	</select>
+	
+	<select id="selectListBarang" resultType="Barang">
+		SELECT * FROM lst_barang b
+		<if test="search != null">
+			WHERE (b.id LIKE CONCAT('%', UPPER(TRIM(#{search})), '%') OR
+				   UPPER(b.nama) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%') )
+		</if>
+		ORDER BY b.nama
+		LIMIT #{offset}, #{rowcount}
+	</select>
+
+	<select id="selectListBarangCount" resultType="Int">
+		SELECT count(*) FROM lst_barang b
+		<if test="search != null">
+			WHERE (b.id LIKE CONCAT('%', UPPER(TRIM(#{search})), '%') OR
+				   UPPER(b.nama) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%') )
+		</if>
+	</select>
+
+	<select id="selectNamaBarangCount" resultType="Int">
+		SELECT count(*) FROM lst_barang b
+		WHERE UPPER(b.nama) = UPPER(TRIM(#{search}))
+	</select>
+	
+	<select id="selectMobil" resultType="Mobil">
+		SELECT 
+			s.*, c.username createuser, m.username modifyuser, k.keterangan jenisName
+		FROM lst_mobil s
+		LEFT OUTER JOIN lst_user c ON s.createby = c.id
+		LEFT OUTER JOIN lst_user m ON s.modifyby = m.id
+		LEFT OUTER JOIN lst_config k ON s.jenis = k.jenis AND k.id = 4
+		<if test="no_polisi != null">
+			WHERE UPPER(s.no_polisi) = UPPER(#{no_polisi})
+		</if>
+	</select>
+	
+	<select id="selectListMobil" resultType="Mobil">
+		SELECT s.*, k.keterangan jenisName 
+		FROM lst_mobil s
+		LEFT OUTER JOIN lst_config k ON s.jenis = k.jenis AND k.id = 4
+		<if test="search != null">
+			WHERE (UPPER(s.no_polisi) LIKE CONCAT('%', UPPER(#{search}), '%') )
+		</if>
+		ORDER BY s.no_polisi
+		LIMIT #{offset}, #{rowcount}
+	</select>
+
+	<select id="selectListMobilCount" resultType="Int">
+		SELECT count(*) FROM lst_mobil s
+		<if test="search != null">
+			WHERE (UPPER(s.no_polisi) LIKE CONCAT('%', UPPER(#{search}), '%') )
+		</if>
+	</select>
+
+	<select id="selectNamaMobilCount" resultType="Int">
+		SELECT count(*) FROM lst_mobil s
+		WHERE UPPER(s.no_polisi) = UPPER(TRIM(#{search}))
+	</select>
+	
+	<select id="selectKapal" resultType="Kapal">
+		SELECT 
+			s.*, c.username createuser, m.username modifyuser, k.keterangan jenisName 
+		FROM lst_kapal s
+		LEFT OUTER JOIN lst_user c ON s.createby = c.id
+		LEFT OUTER JOIN lst_user m ON s.modifyby = m.id
+		LEFT OUTER JOIN lst_config k ON s.jenis = k.jenis AND k.id = 5
+		<if test="kode != null">
+			WHERE UPPER(s.kode) = UPPER(#{kode})
+		</if>
+	</select>
+	
+	<select id="selectListKapal" resultType="Kapal">
+		SELECT s.*, k.keterangan jenisName  
+		FROM lst_kapal s
+		LEFT OUTER JOIN lst_config k ON s.jenis = k.jenis AND k.id = 5
+		<if test="search != null">
+			WHERE (UPPER(s.kode) LIKE CONCAT('%', UPPER(#{search}), '%') OR
+				   UPPER(s.nama) LIKE CONCAT('%', UPPER(#{search}), '%') )
+		</if>
+		ORDER BY s.kode, s.nama
+		LIMIT #{offset}, #{rowcount}
+	</select>
+
+	<select id="selectListKapalCount" resultType="Int">
+		SELECT count(*) FROM lst_kapal s
+		<if test="search != null">
+			WHERE (UPPER(s.kode) LIKE CONCAT('%', UPPER(#{search}), '%') OR
+				   UPPER(s.nama) LIKE CONCAT('%', UPPER(#{search}), '%') )
+		</if>
+	</select>
+
+	<select id="selectNamaKapalCount" resultType="Int">
+		SELECT count(*) FROM lst_kapal s
+		WHERE UPPER(s.kode) = UPPER(TRIM(#{search}))
+	</select>
+	
+	<select id="selectHarga" resultType="Harga">
+		SELECT 
+			s.*, c.username createuser, m.username modifyuser, x.nama customerName, y.nama barangName 
+		FROM lst_harga s
+		LEFT OUTER JOIN lst_user c ON s.createby = c.id
+		LEFT OUTER JOIN lst_user m ON s.modifyby = m.id
+		LEFT OUTER JOIN mst_customer x ON s.customer_id = x.id
+		LEFT OUTER JOIN lst_barang y ON s.barang_id = y.id
+		WHERE 1 = 1
+		<if test="customer_id != null">
+			AND UPPER(s.customer_id) = UPPER(#{customer_id})
+		</if>
+		<if test="barang_id != null">
+			AND UPPER(s.barang_id) = UPPER(#{barang_id})
+		</if>
+	</select>
+	
+	<select id="selectListHarga" resultType="Harga">
+		SELECT s.* , x.nama customerName, y.nama barangName 
+		FROM lst_harga s
+		LEFT OUTER JOIN mst_customer x ON s.customer_id = x.id
+		LEFT OUTER JOIN lst_barang y ON s.barang_id = y.id
+		<if test="search != null">
+			WHERE (UPPER(x.nama) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%') OR
+				   UPPER(y.nama) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%') )
+		</if>
+		ORDER BY x.nama, y.nama
+		LIMIT #{offset}, #{rowcount}
+	</select>
+
+	<select id="selectListHargaCount" resultType="Int">
+		SELECT count(*) 
+		FROM lst_harga s
+		LEFT OUTER JOIN mst_customer x ON s.customer_id = x.id
+		LEFT OUTER JOIN lst_barang y ON s.barang_id = y.id
+		<if test="search != null">
+			WHERE (UPPER(x.nama) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%') OR
+				   UPPER(y.nama) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%') )
+		</if>
+	</select>
+
+	<select id="selectNamaHargaCount" resultType="Int">
+		SELECT count(*) FROM lst_harga s
+		WHERE (UPPER(s.customer_id) LIKE CONCAT('%', UPPER(TRIM(#{customer_id})), '%') AND
+			   UPPER(s.barang_id) LIKE CONCAT('%', UPPER(TRIM(#{barang_id})), '%') )
+	</select>
+	
+	<select id="selectCabang" resultType="Cabang">
+		SELECT 
+			b.*, c.username createuser, m.username modifyuser 
+		FROM lst_cabang b
+		LEFT OUTER JOIN lst_user c ON b.createby = c.id
+		LEFT OUTER JOIN lst_user m ON b.modifyby = m.id
+		<if test="id != null">
+			WHERE b.id = #{id}
+		</if>
+	</select>
+	
+	<select id="selectListCabang" resultType="Cabang">
+		SELECT * FROM lst_cabang b
+		<if test="search != null">
+			WHERE (b.id LIKE CONCAT('%', UPPER(TRIM(#{search})), '%') OR
+				   UPPER(b.kode) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%')  OR
+				   UPPER(b.nama) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%') )
+		</if>
+		ORDER BY b.kode, b.nama
+		LIMIT #{offset}, #{rowcount}
+	</select>
+
+	<select id="selectListCabangCount" resultType="Int">
+		SELECT count(*) FROM lst_cabang b
+		<if test="search != null">
+			WHERE (b.id LIKE CONCAT('%', UPPER(TRIM(#{search})), '%') OR
+				   UPPER(b.kode) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%')  OR
+				   UPPER(b.nama) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%') )
+		</if>
+	</select>
+
+	<select id="selectNamaCabangCount" resultType="Int">
+		SELECT count(*) FROM lst_cabang b
+		WHERE UPPER(b.kode) = UPPER(TRIM(#{search}))
+	</select>
+	
+	<select id="selectTrans" resultType="Trans">
+		SELECT 
+			t.*, cr.username createuser, mo.username modifyuser, ca.username canceluser,
+			ifnull((SELECT max(urut) FROM mst_trans_det WHERE trans_id = t.id), 0) urut,
+			c1.nama customer, c2.nama tujuan
+		FROM mst_trans t
+		LEFT OUTER JOIN lst_user cr ON t.createby = cr.id
+		LEFT OUTER JOIN lst_user mo ON t.modifyby = mo.id
+		LEFT OUTER JOIN lst_user ca ON t.cancelby = ca.id
+		LEFT OUTER JOIN mst_customer c1 ON t.customer_id = c1.id
+		LEFT OUTER JOIN mst_customer c2 ON t.tujuan_id = c2.id
+		<if test="id != null">WHERE t.id = #{id}</if>
+	</select>
+	
+	<select id="selectListTrans" resultType="Trans">
+		SELECT t.*, c.nama customer, b.nama cabang, c2.nama tujuan
+		FROM mst_trans t, mst_customer c, lst_cabang b, mst_customer c2
+		WHERE t.customer_id = c.id AND t.cabang_id = b.id AND t.tujuan_id = c2.id
+		<if test="search != null">
+			AND (
+				UPPER(t.no_stt) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%') OR
+				UPPER(c.nama) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%')
+			)
+		</if>
+		<if test="periodFrom != null">
+			AND t.tgl_stt <![CDATA[>=]]> #{periodFrom}
+		</if>
+		<if test="periodTo != null">
+			AND t.tgl_stt <![CDATA[<=]]> #{periodTo}		
+		</if>
+		ORDER BY t.no_stt DESC
+		LIMIT #{offset}, #{rowcount}
+	</select>
+
+	<select id="selectListTransCount" resultType="Int">
+		SELECT count(*)
+		FROM mst_trans t, mst_customer c, lst_cabang b
+		WHERE t.customer_id = c.id AND t.cabang_id = b.id
+		<if test="search != null">
+			AND (
+				UPPER(t.no_stt) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%') OR
+				UPPER(c.nama) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%')
+			)
+		</if>
+		<if test="periodFrom != null">
+			AND t.tgl_stt <![CDATA[>=]]> #{periodFrom}
+		</if>
+		<if test="periodTo != null">
+			AND t.tgl_stt <![CDATA[<=]]> #{periodTo}		
+		</if>
+	</select>
+
+	<select id="selectMenu" parameterType="String" resultType="Menu">
+		select child.path,child.parent, parent.nama parent_nama, parent.link parent_link,
+			   child.id, child.nama, child.link, child.level, child.urut from lst_menu child
+		INNER JOIN lst_menu parent on child.parent = parent.id and parent.active=true
+		where child.active=true
+		<if test="value != null">
+			and child.id = #{value}
+		</if>
+		order by child.path, child.urut
+	</select>
+
+	<select id="selectListMenu"  resultType="Menu">
+  		select * from (
+	  		select child.path,child.parent, parent.nama parent_nama, parent.link parent_link,
+			   child.id, child.nama, child.link, child.level, child.urut from lst_menu child
+				INNER JOIN lst_menu parent on child.parent = parent.id and parent.active=true
+				where child.active=true
+		) x
+		<if test="search != null">
+		where (parent_nama LIKE CONCAT('%', #{search}, '%') OR
+			 parent_link LIKE CONCAT('%', #{search}, '%') OR
+			 id LIKE CONCAT('%', #{search}, '%') OR
+		  	 nama LIKE CONCAT('%', #{search}, '%') OR
+		     urut LIKE CONCAT('%', #{search}, '%'))
+		</if>
+		order by path, urut
+		LIMIT #{offset}, #{rowcount}
+	</select>
+
+	<select id="selectListMenuCount" parameterType="String" resultType="Integer">
+		SELECT count(*) FROM (
+			select * from (
+		  		select child.path,child.parent, parent.nama parent_nama, parent.link parent_link,
+				   child.id, child.nama, child.link, child.level, child.urut from lst_menu child
+					INNER JOIN lst_menu parent on child.parent = parent.id and parent.active=true
+					where child.active=true
+			) x
+			<if test="value != null">
+			where (parent_nama LIKE CONCAT('%', #{value}, '%') OR
+				 parent_link LIKE CONCAT('%', #{value}, '%') OR
+				 id LIKE CONCAT('%', #{value}, '%') OR
+			  	 nama LIKE CONCAT('%', #{value}, '%') OR
+			     urut LIKE CONCAT('%', #{value}, '%'))
+			</if>
+		)count
+	</select>
+	
+	<select id="selectListHargaPerCustomer" resultType="DropDown">
+		SELECT b.id "key", b.nama "value", IFNULL(h.harga, 0) "desc"
+		FROM lst_barang b
+		LEFT OUTER JOIN (SELECT * FROM lst_harga WHERE customer_id = #{customer_id} AND active = 1) h ON b.id = h.barang_id
+		WHERE UPPER(b.nama) LIKE CONCAT('%', UPPER(TRIM(#{nama})), '%') AND b.active = 1
+	</select>
+
+	<select id="selectListTransDet" resultType="TransDet">
+		SELECT a.*, ifnull(b.colly_naik, 0) colly_naik
+		FROM mst_trans_det a
+			 LEFT JOIN (SELECT trans_id, trans_urut, SUM(colly_naik) colly_naik FROM mst_delivery_det GROUP BY trans_id, trans_urut ) b ON a.trans_id = b.trans_id AND a.urut = b.trans_urut
+		WHERE a.trans_id = #{trans_id}
+		ORDER BY a.urut ;
+	</select>
+	
+	<select id="selectIdFromNamaBarang" resultType="Integer">
+		SELECT id FROM lst_barang WHERE UPPER(TRIM(nama)) = UPPER(TRIM(#{value}))
+	</select>
+	
+	<select id="selectNoSTTFromIdSTT" resultType="String">
+		SELECT no_stt FROM mst_trans WHERE id = #{value}
+	</select>
+	
+	<select id="selectDelivery" resultType="Delivery">
+		SELECT 
+			d.*, cr.username createuser, mo.username modifyuser, ca.username canceluser, s.nama supir_nama, concat('[', kode, '] ', k.nama) kapal_nama
+		FROM mst_delivery d
+		LEFT OUTER JOIN lst_user cr ON d.createby = cr.id
+		LEFT OUTER JOIN lst_user mo ON d.modifyby = mo.id
+		LEFT OUTER JOIN lst_user ca ON d.cancelby = ca.id
+		LEFT OUTER JOIN lst_supir s ON d.supir_id = s.id
+		LEFT OUTER JOIN lst_kapal k ON d.kode_kapal = k.kode
+		<if test="id != null">WHERE d.id = #{id}</if>
+	</select>
+	
+	<select id="selectListDelivery" resultType="Delivery">
+		SELECT d.*, s.nama supir_nama, k.nama kapal_nama
+		FROM mst_delivery d, lst_supir s, lst_kapal k
+		WHERE d.supir_id = s.id
+		AND d.kode_kapal = k.kode
+		<if test="search != null">
+		AND (
+			UPPER(d.no_polisi) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%') OR
+			UPPER(s.nama) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%') OR
+			UPPER(k.kode) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%') OR
+			UPPER(k.nama) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%')
+		)
+		</if>
+		<if test="periodFrom != null">
+			AND d.tgl_kirim <![CDATA[>=]]> #{periodFrom}
+		</if>
+		<if test="periodTo != null">
+			AND d.tgl_kirim <![CDATA[<=]]> #{periodTo}		
+		</if>
+		ORDER BY d.id DESC
+		LIMIT #{offset}, #{rowcount}
+	</select>
+
+	<select id="selectListDeliveryCount" resultType="Int">
+		SELECT count(*)
+		FROM mst_delivery d, lst_supir s, lst_kapal k
+		WHERE d.supir_id = s.id
+		AND d.kode_kapal = k.kode
+		<if test="search != null">
+		AND (
+			UPPER(d.no_polisi) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%') OR
+			UPPER(s.nama) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%') OR
+			UPPER(k.kode) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%') OR
+			UPPER(k.nama) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%')
+		)
+		</if>
+		<if test="periodFrom != null">
+			AND d.tgl_kirim <![CDATA[>=]]> #{periodFrom}
+		</if>
+		<if test="periodTo != null">
+			AND d.tgl_kirim <![CDATA[<=]]> #{periodTo}		
+		</if>
+	</select>
+	
+	<select id="selectListDeliveryDet" resultType="DeliveryDet">
+		SELECT d.*, t.no_stt, c.nama customer_nama, td.colly, td.nama_barang
+		FROM mst_delivery_det d, mst_trans_det td, mst_trans t, mst_customer c
+		WHERE d.delivery_id = #{delivery_id}
+		AND d.trans_id = td.trans_id
+		AND d.trans_urut = td.urut
+		AND td.trans_id = t.id
+		AND t.customer_id = c.id
+		ORDER BY c.nama, td.nama_barang
+	</select>
+	
+	<select id="selectListItemDalamSTT" resultType="TransDet">
+		SELECT t.no_stt, t.customer_id, t.colly colly_stt, c.nama customer, td.trans_id, td.urut, td.barang_id, td.nama_barang, td.colly, td.colly_remain,
+		concat('[', t.no_stt, ' | ', c.nama, ' | ', t.colly, '] ', td.nama_barang, ' (', FORMAT(td.colly, 0), '/', FORMAT(td.colly_remain, 0), ')') value
+		FROM mst_trans t, mst_customer c, mst_trans_det td
+		WHERE t.cancel = 0
+		AND t.tujuan_id = c.id
+		AND t.id = td.trans_id
+		AND td.colly_remain > 0
+		AND t.no_stt LIKE CONCAT('%', UPPER(TRIM(#{value})), '%')
+		ORDER BY t.no_stt, td.trans_id, td.urut
+	</select>
+	
+	<select id="selectBiaya" resultType="Biaya">
+		SELECT 
+			b.*, c.username createuser, m.username modifyuser 
+		FROM lst_biaya b
+		LEFT OUTER JOIN lst_user c ON b.createby = c.id
+		LEFT OUTER JOIN lst_user m ON b.modifyby = m.id
+		<if test="id != null">
+			WHERE b.id = #{id}
+		</if>
+	</select>
+	
+	<select id="selectListBiaya" resultType="Biaya">
+		SELECT * FROM lst_biaya b
+		<if test="search != null">
+			WHERE (b.id LIKE CONCAT('%', UPPER(TRIM(#{search})), '%') OR
+				   UPPER(b.nama) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%') )
+		</if>
+		ORDER BY b.nama
+		LIMIT #{offset}, #{rowcount}
+	</select>
+
+	<select id="selectListBiayaCount" resultType="Int">
+		SELECT count(*) FROM lst_biaya b
+		<if test="search != null">
+			WHERE (b.id LIKE CONCAT('%', UPPER(TRIM(#{search})), '%') OR
+				   UPPER(b.nama) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%') )
+		</if>
+	</select>
+
+	<select id="selectNamaBiayaCount" resultType="Int">
+		SELECT count(*) FROM lst_biaya b
+		WHERE UPPER(b.nama) = UPPER(TRIM(#{search}))
+	</select>
+	
+	<select id="selectListBiayaByNama" resultType="Biaya">
+		SELECT b.id, b.nama, b.nominal, b.nama value
+		FROM lst_biaya b
+		WHERE active = 1 AND UPPER(b.nama) LIKE CONCAT('%', UPPER(TRIM(#{value})), '%')
+		ORDER BY b.nama
+	</select>
+
+	<select id="selectListDeliveryCost" resultType="DeliveryCost">
+		SELECT c.*, b.nama nama_biaya
+		FROM mst_delivery_cost c, lst_biaya b
+		WHERE c.delivery_id = #{delivery_id}
+		AND c.biaya_id = b.id
+		ORDER BY b.nama
+	</select>
+	
+	<select id="selectTotalColly" resultType="Double">
+		SELECT IFNULL(colly, 0) FROM mst_trans_det WHERE trans_id = #{trans_id} AND urut = #{trans_urut}
+	</select>
+	
+	<select id="selectTotalCollyNaik" resultType="Double">
+		SELECT IFNULL(SUM(dd.colly_naik), 0) colly_naik 
+		FROM mst_delivery_det dd, mst_delivery d
+		WHERE d.id = dd.delivery_id AND d.cancel = 0 AND dd.delivery_id <![CDATA[<>]]> #{delivery_id} AND dd.trans_id = #{trans_id} AND dd.trans_urut = #{trans_urut}
+	</select>
+	
+	<select id="selectPayment" resultType="Payment">
+		SELECT 
+			p.*, cr.username createuser, mo.username modifyuser, ca.username canceluser, t.no_stt, c.nama customer, c2.nama tujuan
+		FROM mst_payment p 
+		LEFT OUTER JOIN lst_user cr ON p.createby = cr.id
+		LEFT OUTER JOIN lst_user mo ON p.modifyby = mo.id
+		LEFT OUTER JOIN lst_user ca ON p.cancelby = ca.id
+		LEFT OUTER JOIN mst_trans t ON p.trans_id = t.id
+		LEFT OUTER JOIN mst_customer c ON t.customer_id = c.id
+		LEFT OUTER JOIN mst_customer c2 ON t.tujuan_id = c2.id
+ 		<if test="payment_id != null">WHERE p.payment_id = #{payment_id}</if>
+	</select>
+	
+	<select id="selectListPayment" resultType="Payment">
+		SELECT 
+			p.payment_id, p.no_payment, p.paid_date, upper(p.dk) dk, p.nominal, p.due_date, p.keterangan, p.createdate,
+			c.keterangan pay_ket, cr.username createuser, p.cancel
+		FROM mst_payment p 
+		LEFT OUTER JOIN lst_user cr ON p.createby = cr.id
+		LEFT OUTER JOIN (SELECT jenis, keterangan FROM lst_config WHERE id = 2) c ON p.pay_mode = c.jenis
+		WHERE p.trans_id is null
+		<if test="search != null">
+			AND (
+				UPPER(p.no_payment) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%') OR
+				UPPER(p.keterangan) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%') OR
+				UPPER(c.keterangan) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%')
+			)
+		</if>
+		<if test="periodFrom != null">
+			AND p.paid_date <![CDATA[>=]]> #{periodFrom}
+		</if>
+		<if test="periodTo != null">
+			AND p.paid_date <![CDATA[<=]]> #{periodTo}		
+		</if>		
+		ORDER BY createdate DESC
+		LIMIT #{offset}, #{rowcount}
+	</select>
+
+	<select id="selectListPaymentCount" resultType="Int">
+		SELECT count(*)
+		FROM mst_payment p 
+		LEFT OUTER JOIN lst_user cr ON p.createby = cr.id
+		LEFT OUTER JOIN (SELECT jenis, keterangan FROM lst_config WHERE id = 2) c ON p.pay_mode = c.jenis
+		WHERE p.trans_id is null
+		<if test="search != null">
+			AND (
+				UPPER(p.no_payment) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%') OR
+				UPPER(p.keterangan) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%') OR
+				UPPER(c.keterangan) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%')
+			)
+		</if>
+		<if test="periodFrom != null">
+			AND p.paid_date <![CDATA[>=]]> #{periodFrom}
+		</if>
+		<if test="periodTo != null">
+			AND p.paid_date <![CDATA[<=]]> #{periodTo}		
+		</if>		
+	</select>
+	
+	<select id="selectListPaymentSTT" resultType="Payment">
+		SELECT 
+			p.payment_id, p.no_payment, p.paid_date, upper(p.dk) dk, p.nominal, p.due_date, p.keterangan, p.createdate,
+			c.keterangan pay_ket, cr.username createuser, t.no_stt, p.cancel
+		FROM mst_payment p
+		INNER JOIN mst_trans t ON p.trans_id = t.id
+		LEFT OUTER JOIN lst_user cr ON p.createby = cr.id
+		LEFT OUTER JOIN (SELECT jenis, keterangan FROM lst_config WHERE id = 2) c ON p.pay_mode = c.jenis
+		<if test="search != null">
+			WHERE (
+				UPPER(p.no_payment) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%') OR
+				UPPER(p.keterangan) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%') OR
+				UPPER(c.keterangan) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%') OR
+				UPPER(t.no_stt) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%')
+			)
+		</if>
+		<if test="periodFrom != null">
+			AND p.paid_date <![CDATA[>=]]> #{periodFrom}
+		</if>
+		<if test="periodTo != null">
+			AND p.paid_date <![CDATA[<=]]> #{periodTo}		
+		</if>		
+		ORDER BY createdate DESC
+		LIMIT #{offset}, #{rowcount}
+	</select>
+
+	<select id="selectListPaymentSTTCount" resultType="Int">
+		SELECT count(*)
+		FROM mst_payment p
+		INNER JOIN mst_trans t ON p.trans_id = t.id
+		LEFT OUTER JOIN lst_user cr ON p.createby = cr.id
+		LEFT OUTER JOIN (SELECT jenis, keterangan FROM lst_config WHERE id = 2) c ON p.pay_mode = c.jenis
+		<if test="search != null">
+			WHERE (
+				UPPER(p.no_payment) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%') OR
+				UPPER(p.keterangan) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%') OR
+				UPPER(c.keterangan) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%') OR
+				UPPER(t.no_stt) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%')
+			)
+		</if>
+		<if test="periodFrom != null">
+			AND p.paid_date <![CDATA[>=]]> #{periodFrom}
+		</if>
+		<if test="periodTo != null">
+			AND p.paid_date <![CDATA[<=]]> #{periodTo}		
+		</if>		
+	</select>
+	
+	<select id="selectListSTTForPayment" resultType="Trans">
+		SELECT t.id, t.no_stt, t.tgl_stt, c.nama customer, t.pay_mode, t.remain, d.nama tujuan,
+		concat('[', t.no_stt, ' | ', date_format(t.tgl_stt, '%d/%m'), ' ] ', c.nama, ' - ', IFNULL(d.nama, ''), ' (', FORMAT(t.remain, 0), ' / ', FORMAT(t.total_harga-t.potongan, 0), ')') value
+		FROM mst_trans t
+		INNER JOIN mst_customer c ON t.customer_id = c.id	
+		LEFT OUTER JOIN mst_customer d ON t.tujuan_id = d.id
+		WHERE t.cancel = 0
+		AND t.no_stt LIKE CONCAT('%', UPPER(TRIM(#{value})), '%')
+	</select>
+	
+	<select id="selectRemainingPayment" resultType="Double">
+		SELECT 
+			ifnull(
+				total_harga - potongan - 
+				(SELECT ifnull(sum(nominal * (case when upper(p.dk) = 'D' then 1 when upper(p.dk) = 'K' then -1 end)), 0) 
+				 FROM mst_payment p WHERE trans_id = t.id AND cancel = 0)
+			, 0)
+		FROM mst_trans t
+		WHERE t.id = #{value}	
+	</select>
+	
+	<select id="selectListOutstandingCustomer" resultType="Customer">		
+		SELECT DISTINCT
+			CASE WHEN (tr.cabang_id = tr.pay_mode) or tr.pay_mode = 0 THEN c.id ELSE c2.id END id,
+			CASE WHEN (tr.cabang_id = tr.pay_mode) or tr.pay_mode = 0 THEN c.nama ELSE c2.nama END nama,
+			CASE WHEN (tr.cabang_id = tr.pay_mode) or tr.pay_mode = 0 THEN c.limit_hutang ELSE c2.limit_hutang END limit_hutang,
+			SUM(tr.total_harga) total_harga, SUM(tr.potongan) potongan, 
+			IFNULL(payment.paid, 0) paid,
+			SUM(tr.remain) remain, MIN(tgl_stt) since
+		FROM mst_trans tr
+			 LEFT JOIN mst_customer c ON c.id = tr.customer_id
+			 LEFT JOIN mst_customer c2 ON c2.id = tr.tujuan_id
+			 LEFT JOIN (SELECT trans_id, SUM(nominal) paid 
+					    FROM mst_payment 
+						WHERE IFNULL(cancel, 0) = 0
+						AND trans_id IS NOT NULL
+						) payment ON payment.trans_id = tr.id
+		WHERE IFNULL(tr.cancel, 0) = 0 AND tr.remain > 0
+		<if test="search != null">
+			AND (
+				UPPER(CASE WHEN (tr.cabang_id = tr.pay_mode) or tr.pay_mode = 0 THEN c.nama ELSE c2.nama END) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%')
+			)
+		</if>
+		GROUP BY CASE WHEN (tr.cabang_id = tr.pay_mode) or tr.pay_mode = 0 THEN c.id ELSE c2.id END,
+				 CASE WHEN (tr.cabang_id = tr.pay_mode) or tr.pay_mode = 0 THEN c.nama ELSE c2.nama END,
+			     CASE WHEN (tr.cabang_id = tr.pay_mode) or tr.pay_mode = 0 THEN c.limit_hutang ELSE c2.limit_hutang END
+		ORDER BY since, CASE WHEN (tr.cabang_id = tr.pay_mode) or tr.pay_mode = 0 THEN c.nama ELSE c2.nama END;
+	</select>
+
+	<select id="selectListOutstandingCustomerCount" resultType="Int">
+		SELECT count(*) FROM (
+			SELECT DISTINCT
+				CASE WHEN (tr.cabang_id = tr.pay_mode) or tr.pay_mode = 0 THEN c.id ELSE c2.id END id,
+				CASE WHEN (tr.cabang_id = tr.pay_mode) or tr.pay_mode = 0 THEN c.nama ELSE c2.nama END nama,
+				CASE WHEN (tr.cabang_id = tr.pay_mode) or tr.pay_mode = 0 THEN c.limit_hutang ELSE c2.limit_hutang END limit_hutang, 
+				SUM(tr.total_harga) total_harga, SUM(tr.potongan) potongan, 
+				SUM(tr.remain) remain, MIN(tgl_stt) since
+			FROM mst_trans tr
+			 	 LEFT JOIN mst_customer c ON c.id = tr.customer_id
+			 	 LEFT JOIN mst_customer c2 ON c2.id = tr.tujuan_id
+			WHERE IFNULL(tr.cancel, 0) = 0 AND tr.remain > 0
+			AND tr.customer_id = c.id
+			<if test="search != null">
+				AND (
+					UPPER(CASE WHEN (tr.cabang_id = tr.pay_mode) or tr.pay_mode = 0 THEN c.nama ELSE c2.nama END) LIKE CONCAT('%', UPPER(TRIM(#{search})), '%')
+				)
+			</if>
+			GROUP BY CASE WHEN (tr.cabang_id = tr.pay_mode) or tr.pay_mode = 0 THEN c.id ELSE c2.id END,
+					 CASE WHEN (tr.cabang_id = tr.pay_mode) or tr.pay_mode = 0 THEN c.nama ELSE c2.nama END,
+				     CASE WHEN (tr.cabang_id = tr.pay_mode) or tr.pay_mode = 0 THEN c.limit_hutang ELSE c2.limit_hutang END
+		) a
+	</select>
+		
+	<select id="selectCekLimitHutangCustomer" resultType="Integer">
+		SELECT (case when SUM(t.remain) >= c.limit_hutang then 1 else 0 end) lewat
+		FROM mst_trans t, mst_customer c
+		WHERE IFNULL(t.cancel, 0) = 0 AND t.remain > 0
+		AND t.customer_id = #{value}
+	</select>
+	
+	<select id="selectValidasiSTTSudahNaikRBT" resultType="Integer" parameterType="Integer">
+		SELECT count(*) FROM mst_delivery d, mst_delivery_det dd
+		WHERE d.id = dd.delivery_id AND d.cancel = 0 AND dd.trans_id = #{value}
+	</select>
+	
+	<select id="selectValidasiItemSTTSudahNaikRBT" resultType="Integer" parameterType="TransDet">
+		SELECT count(*) FROM mst_delivery d, mst_delivery_det dd
+		WHERE d.id = dd.delivery_id AND d.cancel = 0 AND dd.trans_id = #{trans_id} AND dd.trans_urut = #{urut}
+	</select>
+	
+</mapper>

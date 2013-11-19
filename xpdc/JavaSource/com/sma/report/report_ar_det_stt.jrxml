@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created using JasperAssistant (http://www.jasperassistant.com) -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report_ar_det_stt" pageWidth="500" pageHeight="595" orientation="Landscape" columnWidth="500" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" scriptletClass="com.sma.utils.JasperScriptlet">
+	<property name="com.jasperassistant.designer.DataSource" value="xpdc"/>
+	<property name="com.jasperassistant.designer.Grid" value="false"/>
+	<property name="com.jasperassistant.designer.SnapToGrid" value="false"/>
+	<property name="com.jasperassistant.designer.GridWidth" value="12"/>
+	<property name="com.jasperassistant.designer.GridHeight" value="12"/>
+	<parameter name="customer_id" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[new Integer(2)]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT a.no_stt, a.tgl_stt, a.customer_id, a.total_harga - a.potongan total_harga, a.remain
+FROM mst_trans a 
+WHERE (CASE WHEN (a.cabang_id = a.pay_mode) or a.pay_mode = 0 THEN a.customer_id ELSE a.tujuan_id END) = $P{customer_id}
+ORDER BY a.tgl_stt
+;]]>
+	</queryString>
+	<field name="customer_id" class="java.lang.Integer"/>
+	<field name="no_stt" class="java.lang.String"/>
+	<field name="remain" class="java.math.BigDecimal"/>
+	<field name="tgl_stt" class="java.util.Date"/>
+	<field name="total_harga" class="java.math.BigDecimal"/>
+	<variable name="total_harga" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{total_harga}]]></variableExpression>
+	</variable>
+	<variable name="total_remain" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{remain}]]></variableExpression>
+	</variable>
+	<detail>
+		<band height="20">
+			<textField hyperlinkType="None">
+				<reportElement x="0" y="0" width="85" height="20"/>
+				<box padding="0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{no_stt}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd-MM-yyyy" hyperlinkType="None">
+				<reportElement x="85" y="0" width="85" height="20"/>
+				<box padding="0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{tgl_stt}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#" hyperlinkType="None">
+				<reportElement x="170" y="0" width="113" height="20"/>
+				<box padding="2">
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{total_harga}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#" hyperlinkType="None">
+				<reportElement x="283" y="0" width="113" height="20"/>
+				<box padding="2">
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{remain}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="27">
+			<staticText>
+				<reportElement x="0" y="1" width="85" height="20"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="85" y="1" width="85" height="20"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<textField pattern="#,##0.00#" hyperlinkType="None">
+				<reportElement x="283" y="1" width="113" height="20"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{total_remain}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#" hyperlinkType="None">
+				<reportElement x="170" y="1" width="113" height="20"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{total_harga}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+	<summary>
+		<band height="4"/>
+	</summary>
+</jasperReport>

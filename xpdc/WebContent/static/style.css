@@ -1,0 +1,83 @@
+body {
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+	font-size: 0.8em; 
+	height: 95%;
+}
+
+table { 
+	font-size: 0.9em;
+}
+
+table caption{ 
+	white-space: nowrap;
+}
+
+fieldset {
+	height: 100%;
+}
+
+.no-close .ui-dialog-titlebar-close {
+	display: none;
+}
+
+.ui-state-error, .ui-state-highlight {
+	padding: 0.5em;
+	font-size: 1em;
+}
+
+#menubar li ul li a{
+	color: gray;
+}
+
+.styleTable {
+	border-collapse: collapse;
+	min-width: 500px;
+}
+.styleTable th, .styleTable td{
+	padding: 0.3em;	
+}
+.styleTable caption{
+	padding: 0.3em;
+	text-align: right;
+}
+
+.datepicker {
+	width: 100px;
+	text-align: center;
+}
+
+.datepicker-disabled {
+	width: 100px;
+	text-align: center;
+}
+
+.fieldError {
+	border: 1px solid red !important;
+}
+
+.center {
+	text-align: center;
+}
+
+.right {
+	text-align: right;
+}
+
+.ui-autocomplete-input { /* inputan yg autocomplete, dikasih border kuning */
+	border: 1px solid #fcd113 !important;
+}
+
+.ui-autocomplete-loading { /* FIXME: path masih belum bener, image nya gak keluar */
+  background: white url('jquery/start/images/ui-anim_basic_16x16.gif') right center no-repeat;
+}
+
+.mandatory{
+	color: red;
+	font-weight: bold;
+}
+
+.note{
+	font-size: 0.8em;
+	font-style: italic;
+	color: blue;
+}

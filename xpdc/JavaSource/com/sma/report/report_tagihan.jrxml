@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created using JasperAssistant (http://www.jasperassistant.com) -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report_tagihan" pageWidth="612" pageHeight="791" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="30" bottomMargin="30" scriptletClass="com.sma.utils.JasperScriptlet">
+	<property name="com.jasperassistant.designer.Grid" value="false"/>
+	<property name="com.jasperassistant.designer.SnapToGrid" value="false"/>
+	<property name="com.jasperassistant.designer.GridWidth" value="12"/>
+	<property name="com.jasperassistant.designer.GridHeight" value="12"/>
+	<property name="com.jasperassistant.designer.DataSource" value="xpdc"/>
+	<parameter name="customer_id" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[new Integer(2)]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT a.id trans_id, a.no_stt, a.tgl_stt, a.remain, a.total_harga - a.potongan totalharga, a.colly, 
+	   CASE WHEN (a.cabang_id = a.pay_mode) or a.pay_mode = 0 THEN c.nama ELSE c2.nama END namacust,
+	   CASE WHEN (a.cabang_id = a.pay_mode) or a.pay_mode = 0 THEN c.contact ELSE c2.contact END up,
+	   u.nama userinput
+FROM mst_trans a
+	 LEFT JOIN mst_customer c ON a.customer_id = c.id
+	 LEFT JOIN mst_customer c2 ON a.tujuan_id = c2.id
+	 LEFT JOIN lst_user u ON a.createby = u.id
+WHERE a.cancel = 0
+  AND a.remain > 0
+  AND (CASE WHEN (a.cabang_id = a.pay_mode) or a.pay_mode = 0 THEN a.customer_id ELSE a.tujuan_id END) = $P{customer_id}
+ORDER BY a.tgl_stt, a.no_stt	
+;]]>
+	</queryString>
+	<field name="colly" class="java.math.BigDecimal"/>
+	<field name="namacust" class="java.lang.String"/>
+	<field name="no_stt" class="java.lang.String"/>
+	<field name="remain" class="java.math.BigDecimal"/>
+	<field name="tgl_stt" class="java.util.Date"/>
+	<field name="totalharga" class="java.math.BigDecimal"/>
+	<field name="trans_id" class="java.lang.Integer"/>
+	<field name="up" class="java.lang.String"/>
+	<field name="userinput" class="java.lang.String"/>
+	<variable name="tot_remain" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[new BigDecimal($F{remain}.doubleValue())]]></variableExpression>
+	</variable>
+	<variable name="tot_harga" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{totalharga}]]></variableExpression>
+	</variable>
+	<title>
+		<band height="320">
+			<staticText>
+				<reportElement x="89" y="298" width="83" height="22"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="216" y="298" width="215" height="22"/>
+				<box topPadding="0" leftPadding="2" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Item Description]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="431" y="298" width="128" height="22"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Unit Price]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="6" y="298" width="83" height="22"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[No. STT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="172" y="298" width="44" height="22"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Colly]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="56" y="157" width="134" height="15"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="11"/>
+				</textElement>
+				<text><![CDATA[Invoice Number : ]]></text>
+			</staticText>
+			<textField hyperlinkType="None">
+				<reportElement x="56" y="171" width="134" height="15"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{REPORT_SCRIPTLET}.convertDateToString(new Date(), "dd") + "/SMA/" + $P{REPORT_SCRIPTLET}.convertDateToString(new Date(), "MM/yyyy")
+
+]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="370" y="157" width="111" height="15"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="11"/>
+				</textElement>
+				<text><![CDATA[Date Number : ]]></text>
+			</staticText>
+			<textField hyperlinkType="None">
+				<reportElement x="370" y="173" width="111" height="15"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{REPORT_SCRIPTLET}.formatDateIndonesian(new Date())]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="6" y="200" width="37" height="15"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="11"/>
+				</textElement>
+				<text><![CDATA[From : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="45" y="200" width="226" height="15"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[CV. SUKSES MAKMUR ANGKUTAN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="6" y="219" width="214" height="15"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="11"/>
+				</textElement>
+				<text><![CDATA[Jl. Peta Barat Ruko No. 88 G]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="6" y="233" width="214" height="15"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="11"/>
+				</textElement>
+				<text><![CDATA[Cengkareng Jakarta Barat]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="6" y="247" width="72" height="15"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="11"/>
+				</textElement>
+				<text><![CDATA[Phone / Fax   ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="79" y="247" width="84" height="15"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="11"/>
+				</textElement>
+				<text><![CDATA[: (021) 545 6461]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="6" y="261" width="72" height="15"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="11"/>
+				</textElement>
+				<text><![CDATA[HP ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="79" y="261" width="84" height="15"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="11"/>
+				</textElement>
+				<text><![CDATA[: 0811 982 927]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="342" y="200" width="25" height="15"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="11"/>
+				</textElement>
+				<text><![CDATA[To : ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="370" y="200" width="185" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{namacust}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="6" y="283" width="182" height="15"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Itemized List]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="32">
+			<textField hyperlinkType="None">
+				<reportElement x="6" y="1" width="83" height="16"/>
+				<box>
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="11"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{no_stt}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd-MM-yyyy" hyperlinkType="None">
+				<reportElement x="89" y="1" width="83" height="16"/>
+				<box>
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="11"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{tgl_stt}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="6" y="16" width="83" height="16"/>
+				<box>
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement markup="none"/>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="89" y="16" width="83" height="16"/>
+				<box>
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement markup="none"/>
+			</textField>
+			<subreport>
+				<reportElement x="172" y="1" width="387" height="31"/>
+				<subreportParameter name="trans_id">
+					<subreportParameterExpression><![CDATA[$F{trans_id}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA["report_tagihan_det.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<pageFooter>
+		<band/>
+	</pageFooter>
+	<summary>
+		<band height="213">
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" x="431" y="1" width="23" height="22"/>
+				<box topPadding="0" leftPadding="1" bottomPadding="0" rightPadding="0">
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Rp.]]></text>
+			</staticText>
+			<textField pattern="#,##0.##" hyperlinkType="None">
+				<reportElement stretchType="RelativeToBandHeight" x="454" y="1" width="105" height="22"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{totalharga}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="352" y="130" width="186" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="11"/>
+				</textElement>
+				<text><![CDATA[Hormat Kami,]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="352" y="198" width="186" height="15"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="11"/>
+				</textElement>
+				<text><![CDATA[( CV. Sukses Makmur Angkutan )]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" x="6" y="30" width="102" height="15"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="11"/>
+				</textElement>
+				<text><![CDATA[Notes :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" x="6" y="45" width="284" height="15"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="11"/>
+				</textElement>
+				<text><![CDATA[Mohon Tagihan ini di transfer ke nomor rekening kami :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" x="56" y="60" width="75" height="15"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[An]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" x="56" y="105" width="75" height="15"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Cabang]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" x="56" y="75" width="75" height="15"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Ac]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" x="56" y="90" width="75" height="15"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Bank]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" x="131" y="60" width="219" height="15"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[:  CV. SUKSES MAKMUR ANGKUTAN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" x="131" y="105" width="219" height="15"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[:  Perumahan Citra I Jakarta Barat]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" x="131" y="90" width="219" height="15"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[:  Bank Central Asia ( BCA )]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" x="131" y="75" width="219" height="15"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[:  399 301 2226]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="6" y="1" width="426" height="22"/>
+				<box padding="4">
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["# " + $P{REPORT_SCRIPTLET}.formatTerbilang($V{tot_remain}, "01") + " #"]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>
