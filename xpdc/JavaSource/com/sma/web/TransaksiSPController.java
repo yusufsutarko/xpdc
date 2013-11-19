@@ -37,6 +37,8 @@ import com.sma.validator.TransaksiSPValidator;
 /**
  * Controller untuk Transaksi SPP (Rincian Barang Terkirim) (Input, Print)
  * 
+ * Test Comment untuk sync di GitHub
+ * 
  * @author Yusuf
  * @since Jul 16, 2013 (10:55:26 AM)
  *
