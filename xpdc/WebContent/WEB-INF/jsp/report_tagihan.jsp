@@ -68,11 +68,11 @@ ${sessionScope.currentUser.menuAkses}
 			<tr>
 				<td><fmt:formatDate value="${c.since}" pattern="dd-MM-yyyy"/></td>
 				<td>${c.nama}</td>
-				<td class="right"><fmt:formatNumber value="${c.total_harga}" type="currency" currencySymbol="Rp " /></td>
-				<td class="right"><fmt:formatNumber value="${c.potongan}" type="currency" currencySymbol="Rp " /></td>
-				<td class="right"><span style="color: blue;"><fmt:formatNumber value="${c.paid}" type="currency" currencySymbol="Rp " /></span></td>
-				<td class="right"><span style="color: red;"><fmt:formatNumber value="${c.remain}" type="currency" currencySymbol="Rp " /></span></td>
-				<td class="right"><fmt:formatNumber value="${c.limit_hutang}" type="currency" currencySymbol="Rp " /></td>
+				<td class="right"><fmt:formatNumber value="${c.total_harga}"  currencySymbol="Rp " /></td>
+				<td class="right"><fmt:formatNumber value="${c.potongan}"  currencySymbol="Rp " /></td>
+				<td class="right"><span style="color: blue;"><fmt:formatNumber value="${c.paid}"  currencySymbol="Rp " /></span></td>
+				<td class="right"><span style="color: red;"><fmt:formatNumber value="${c.remain}"  currencySymbol="Rp " /></span></td>
+				<td class="right"><fmt:formatNumber value="${c.limit_hutang}"  currencySymbol="Rp " /></td>
 				<td>
 					<button onclick="cetak(${c.id}); return false;">Cetak</button>
 				</td>

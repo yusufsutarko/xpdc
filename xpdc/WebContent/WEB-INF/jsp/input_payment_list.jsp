@@ -61,7 +61,7 @@ ${sessionScope.currentUser.menuAkses}
 						<c:otherwise>${d.dk}</c:otherwise>
 					</c:choose>
 				</td>
-				<td class="right"><fmt:formatNumber value="${d.nominal}" type="currency" currencySymbol="Rp " /></td>
+				<td class="right"><fmt:formatNumber value="${d.nominal}"  currencySymbol="Rp " /></td>
 				<td>${d.keterangan}</td>
 				<td class="center">${d.pay_ket}</td>
 				<td><fmt:formatDate value="${d.due_date}" pattern="dd-MM-yyyy"/></td>

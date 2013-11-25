@@ -803,10 +803,13 @@
 	</select>
 		
 	<select id="selectCekLimitHutangCustomer" resultType="Integer">
-		SELECT (case when SUM(t.remain) >= c.limit_hutang then 1 else 0 end) lewat
-		FROM mst_trans t, mst_customer c
-		WHERE IFNULL(t.cancel, 0) = 0 AND t.remain > 0
-		AND t.customer_id = #{value}
+		SELECT (case when (SUM(t.remain) >= c.limit_hutang) AND IFNULL(c.limit_hutang, 0) > 0 then 1 else 0 end) lewat
+		FROM mst_trans t
+			 LEFT JOIN mst_customer c ON t.customer_id = c.id
+			 LEFT JOIN mst_customer c2 ON t.tujuan_id = c2.id
+		WHERE IFNULL(t.cancel, 0) = 0 
+		AND t.remain > 0
+		AND (CASE WHEN (t.cabang_id = t.pay_mode) or t.pay_mode = 0 THEN t.customer_id ELSE t.tujuan_id END) = #{value}
 	</select>
 	
 	<select id="selectValidasiSTTSudahNaikRBT" resultType="Integer" parameterType="Integer">

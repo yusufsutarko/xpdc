@@ -78,9 +78,9 @@ ${sessionScope.currentUser.menuAkses}
 				<td>${t.customer}</td>
 				<td>${t.tujuan}</td>
 				<td class="center"><fmt:formatNumber value="${t.colly}" /></td>
-				<td class="right"><fmt:formatNumber value="${t.total_harga}" type="currency" currencySymbol="Rp " /></td>
-				<td class="right"><fmt:formatNumber value="${t.potongan}" type="currency" currencySymbol="Rp " /></td>
-				<td class="right"><fmt:formatNumber value="${t.remain}" type="currency" currencySymbol="Rp " /></td>
+				<td class="right"><fmt:formatNumber value="${t.total_harga}" currencySymbol="Rp " /></td>
+				<td class="right"><fmt:formatNumber value="${t.potongan}" currencySymbol="Rp " /></td>
+				<td class="right"><fmt:formatNumber value="${t.remain}" currencySymbol="Rp " /></td>
 				<td><fmt:formatDate value="${t.tgl_stt}" pattern="dd-MM-yyyy"/></td>
 				<td><fmt:formatDate value="${t.tgl_kirim_est}" pattern="dd-MM-yyyy"/></td>
 				<td class="center">

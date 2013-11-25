@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created using JasperAssistant (http://www.jasperassistant.com) -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="print_stt_blank" pageWidth="612" pageHeight="397" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="30" bottomMargin="30">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="print_stt_blank" pageWidth="612" pageHeight="397" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="30" bottomMargin="30" scriptletClass="com.sma.utils.JasperScriptlet">
 	<property name="com.jasperassistant.designer.Grid" value="false"/>
 	<property name="com.jasperassistant.designer.SnapToGrid" value="false"/>
 	<property name="com.jasperassistant.designer.GridWidth" value="12"/>
@@ -11,7 +11,9 @@
 	</parameter>
 	<queryString>
 		<![CDATA[SELECT a.*, b.urut, b.barang_id, b.nama_barang, b.satuan_id, b.qty, b.harga, b.colly colly_det, b.colly_remain, 
-c.keterangan cara_bayar, d.keterangan nama_satuan, pengirim.nama customer, penerima.nama tujuan
+c.keterangan cara_bayar, d.keterangan nama_satuan, 
+pengirim.nama customer, pengirim.alamat alamat, pengirim.kota kota, 
+penerima.nama tujuan, penerima.alamat alamat2, penerima.kota kota2
 FROM mst_trans a 
 	 LEFT JOIN lst_config c ON a.pay_mode = c.jenis AND c.id = 1
 	 LEFT JOIN mst_customer pengirim ON a.customer_id = pengirim.id
@@ -22,6 +24,8 @@ WHERE a.id = b.trans_id
 AND a.id = $P{trans_id}
 ;]]>
 	</queryString>
+	<field name="alamat" class="java.lang.String"/>
+	<field name="alamat2" class="java.lang.String"/>
 	<field name="alamat_tujuan" class="java.lang.String"/>
 	<field name="barang_id" class="java.lang.Integer"/>
 	<field name="cabang_id" class="java.lang.Integer"/>
@@ -39,6 +43,8 @@ AND a.id = $P{trans_id}
 	<field name="customer_id" class="java.lang.Integer"/>
 	<field name="harga" class="java.math.BigDecimal"/>
 	<field name="id" class="java.lang.Integer"/>
+	<field name="kota" class="java.lang.String"/>
+	<field name="kota2" class="java.lang.String"/>
 	<field name="modifyby" class="java.lang.Integer"/>
 	<field name="modifydate" class="java.sql.Timestamp"/>
 	<field name="nama_barang" class="java.lang.String"/>
@@ -64,7 +70,7 @@ AND a.id = $P{trans_id}
 		<variableExpression><![CDATA[new BigDecimal(($F{total_harga}.doubleValue()))]]></variableExpression>
 	</variable>
 	<title>
-		<band height="138">
+		<band height="168">
 			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true" hyperlinkType="None">
 				<reportElement x="441" y="41" width="109" height="15"/>
 				<textElement verticalAlignment="Middle">
@@ -80,12 +86,12 @@ AND a.id = $P{trans_id}
 				<text><![CDATA[Tgl. :]]></text>
 			</staticText>
 			<line>
-				<reportElement x="0" y="117" width="556" height="1"/>
+				<reportElement x="0" y="147" width="556" height="1"/>
 			</line>
 			<staticText>
-				<reportElement x="94" y="120" width="313" height="15"/>
+				<reportElement x="94" y="150" width="313" height="15"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Arial" size="10"/>
+					<font fontName="Arial" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<text><![CDATA[Barang]]></text>
 			</staticText>
@@ -104,10 +110,10 @@ AND a.id = $P{trans_id}
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{no_stt}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="0" y="114" width="556" height="1"/>
+				<reportElement x="0" y="144" width="556" height="1"/>
 			</line>
 			<line>
-				<reportElement x="0" y="137" width="556" height="1"/>
+				<reportElement x="0" y="167" width="556" height="1"/>
 			</line>
 			<staticText>
 				<reportElement x="338" y="3" width="214" height="18"/>
@@ -117,44 +123,44 @@ AND a.id = $P{trans_id}
 				<text><![CDATA[SURAT TANDA TERIMA (STT)]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="410" y="83" width="73" height="15"/>
+				<reportElement x="410" y="113" width="73" height="15"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="10"/>
 				</textElement>
 				<text><![CDATA[Pembayaran :]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="410" y="98" width="73" height="15"/>
+				<reportElement x="410" y="128" width="73" height="15"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="10"/>
 				</textElement>
 				<text><![CDATA[Total Colly : ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="434" y="120" width="49" height="15"/>
+				<reportElement x="434" y="150" width="49" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Arial" size="10"/>
+					<font fontName="Arial" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<text><![CDATA[Quantity]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true" hyperlinkType="None">
-				<reportElement x="486" y="98" width="64" height="15"/>
+				<reportElement x="486" y="128" width="64" height="15"/>
 				<textElement verticalAlignment="Middle" markup="none">
 					<font fontName="Arial" size="10"/>
 				</textElement>
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{colly}]]></textFieldExpression>
 			</textField>
 			<textField hyperlinkType="None">
-				<reportElement x="486" y="83" width="64" height="15"/>
+				<reportElement x="486" y="113" width="64" height="15"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{cara_bayar}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="6" y="120" width="39" height="15"/>
+				<reportElement x="6" y="150" width="39" height="15"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Arial" size="10"/>
+					<font fontName="Arial" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<text><![CDATA[Colly]]></text>
 			</staticText>
@@ -187,14 +193,14 @@ Telp. (0717) 425 6045 - 46 - 47 Fax. (0717) 431171]]></text>
 				<text><![CDATA[ANGKUTAN JAKARTA - BANGKA PP]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true" hyperlinkType="None">
-				<reportElement x="66" y="98" width="341" height="15"/>
+				<reportElement x="66" y="113" width="341" height="15"/>
 				<textElement verticalAlignment="Middle" markup="none">
-					<font fontName="Arial"/>
+					<font fontName="Arial" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{tujuan}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true" hyperlinkType="None">
-				<reportElement x="7" y="98" width="58" height="15"/>
+				<reportElement x="7" y="113" width="58" height="15"/>
 				<textElement verticalAlignment="Middle" markup="none">
 					<font fontName="Arial"/>
 				</textElement>
@@ -203,7 +209,7 @@ Telp. (0717) 425 6045 - 46 - 47 Fax. (0717) 431171]]></text>
 			<textField isBlankWhenNull="true" hyperlinkType="None">
 				<reportElement x="66" y="83" width="341" height="15"/>
 				<textElement verticalAlignment="Middle" markup="none">
-					<font fontName="Arial"/>
+					<font fontName="Arial" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{customer}]]></textFieldExpression>
 			</textField>
@@ -213,6 +219,34 @@ Telp. (0717) 425 6045 - 46 - 47 Fax. (0717) 431171]]></text>
 					<font fontName="Arial"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA["Pengirim :"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true" hyperlinkType="None">
+				<reportElement x="7" y="98" width="58" height="15"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Alamat :"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true" hyperlinkType="None">
+				<reportElement x="66" y="98" width="341" height="15"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" isBold="false" pdfFontName="Helvetica" pdfEncoding="Cp1252"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{alamat} + " - " + $F{kota}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true" hyperlinkType="None">
+				<reportElement x="7" y="128" width="58" height="15"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Alamat :"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true" hyperlinkType="None">
+				<reportElement x="66" y="128" width="341" height="15"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" isBold="false" pdfFontName="Helvetica" pdfEncoding="Cp1252"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{alamat2} + " - " + $F{kota2}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

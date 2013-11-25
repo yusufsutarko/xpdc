@@ -40,9 +40,9 @@ ORDER BY a.tgl_stt, a.no_stt
 		<variableExpression><![CDATA[$F{totalharga}]]></variableExpression>
 	</variable>
 	<title>
-		<band height="320">
+		<band height="230">
 			<staticText>
-				<reportElement x="89" y="298" width="83" height="22"/>
+				<reportElement x="89" y="208" width="83" height="22"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
@@ -52,7 +52,7 @@ ORDER BY a.tgl_stt, a.no_stt
 				<text><![CDATA[Date]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="216" y="298" width="215" height="22"/>
+				<reportElement x="216" y="208" width="215" height="22"/>
 				<box topPadding="0" leftPadding="2" bottomPadding="0" rightPadding="0">
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
@@ -62,7 +62,7 @@ ORDER BY a.tgl_stt, a.no_stt
 				<text><![CDATA[Item Description]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="431" y="298" width="128" height="22"/>
+				<reportElement x="431" y="208" width="128" height="22"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
@@ -72,7 +72,7 @@ ORDER BY a.tgl_stt, a.no_stt
 				<text><![CDATA[Unit Price]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="6" y="298" width="83" height="22"/>
+				<reportElement x="6" y="208" width="83" height="22"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
@@ -82,7 +82,7 @@ ORDER BY a.tgl_stt, a.no_stt
 				<text><![CDATA[No. STT]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="172" y="298" width="44" height="22"/>
+				<reportElement x="172" y="208" width="44" height="22"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
@@ -92,107 +92,105 @@ ORDER BY a.tgl_stt, a.no_stt
 				<text><![CDATA[Colly]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="56" y="157" width="134" height="15"/>
+				<reportElement x="56" y="67" width="134" height="15"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="Arial" size="11"/>
 				</textElement>
 				<text><![CDATA[Invoice Number : ]]></text>
 			</staticText>
 			<textField hyperlinkType="None">
-				<reportElement x="56" y="171" width="134" height="15"/>
+				<reportElement x="56" y="81" width="134" height="15"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
 					<font fontName="Arial" size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{REPORT_SCRIPTLET}.convertDateToString(new Date(), "dd") + "/SMA/" + $P{REPORT_SCRIPTLET}.convertDateToString(new Date(), "MM/yyyy")
-
-]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{REPORT_SCRIPTLET}.convertDateToString(new Date(), "dd") + "/SMA/" + $P{REPORT_SCRIPTLET}.convertDateToString(new Date(), "MM/yyyy")]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="370" y="157" width="111" height="15"/>
+				<reportElement x="370" y="67" width="111" height="15"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="Arial" size="11"/>
 				</textElement>
 				<text><![CDATA[Date Number : ]]></text>
 			</staticText>
 			<textField hyperlinkType="None">
-				<reportElement x="370" y="173" width="111" height="15"/>
+				<reportElement x="370" y="83" width="111" height="15"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
 					<font fontName="Arial" size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{REPORT_SCRIPTLET}.formatDateIndonesian(new Date())]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="6" y="200" width="37" height="15"/>
+				<reportElement x="6" y="110" width="37" height="15"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="Arial" size="11"/>
 				</textElement>
 				<text><![CDATA[From : ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="45" y="200" width="226" height="15"/>
+				<reportElement x="45" y="110" width="226" height="15"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="Arial" size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<text><![CDATA[CV. SUKSES MAKMUR ANGKUTAN]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="6" y="219" width="214" height="15"/>
+				<reportElement x="6" y="129" width="214" height="15"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="Arial" size="11"/>
 				</textElement>
 				<text><![CDATA[Jl. Peta Barat Ruko No. 88 G]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="6" y="233" width="214" height="15"/>
+				<reportElement x="6" y="143" width="214" height="15"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="Arial" size="11"/>
 				</textElement>
 				<text><![CDATA[Cengkareng Jakarta Barat]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="6" y="247" width="72" height="15"/>
+				<reportElement x="6" y="157" width="72" height="15"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="Arial" size="11"/>
 				</textElement>
 				<text><![CDATA[Phone / Fax   ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="79" y="247" width="84" height="15"/>
+				<reportElement x="79" y="157" width="84" height="15"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="Arial" size="11"/>
 				</textElement>
 				<text><![CDATA[: (021) 545 6461]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="6" y="261" width="72" height="15"/>
+				<reportElement x="6" y="171" width="72" height="15"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="Arial" size="11"/>
 				</textElement>
 				<text><![CDATA[HP ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="79" y="261" width="84" height="15"/>
+				<reportElement x="79" y="171" width="84" height="15"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="Arial" size="11"/>
 				</textElement>
 				<text><![CDATA[: 0811 982 927]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="342" y="200" width="25" height="15"/>
+				<reportElement x="342" y="110" width="25" height="15"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="Arial" size="11"/>
 				</textElement>
 				<text><![CDATA[To : ]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="370" y="200" width="185" height="15"/>
+			<textField hyperlinkType="None">
+				<reportElement x="370" y="110" width="185" height="15"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{namacust}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="6" y="283" width="182" height="15"/>
+				<reportElement x="6" y="193" width="182" height="15"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="Arial" size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
@@ -222,14 +220,14 @@ ORDER BY a.tgl_stt, a.no_stt
 				</textElement>
 				<textFieldExpression class="java.util.Date"><![CDATA[$F{tgl_stt}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
+			<textField isBlankWhenNull="true" hyperlinkType="None">
 				<reportElement x="6" y="16" width="83" height="16"/>
 				<box>
 					<pen lineWidth="0.0" lineStyle="Solid"/>
 				</box>
 				<textElement markup="none"/>
 			</textField>
-			<textField isBlankWhenNull="true">
+			<textField isBlankWhenNull="true" hyperlinkType="None">
 				<reportElement x="89" y="16" width="83" height="16"/>
 				<box>
 					<pen lineWidth="0.0" lineStyle="Solid"/>
@@ -361,7 +359,7 @@ ORDER BY a.tgl_stt, a.no_stt
 				</textElement>
 				<text><![CDATA[:  399 301 2226]]></text>
 			</staticText>
-			<textField isStretchWithOverflow="true">
+			<textField isStretchWithOverflow="true" hyperlinkType="None">
 				<reportElement stretchType="RelativeToBandHeight" x="6" y="1" width="426" height="22"/>
 				<box padding="4">
 					<pen lineWidth="1.0" lineStyle="Solid"/>

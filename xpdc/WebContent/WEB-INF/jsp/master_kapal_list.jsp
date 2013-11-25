@@ -46,7 +46,7 @@ ${sessionScope.currentUser.menuAkses}
 				<td>${u.kode}</td>
 				<td>${u.nama}</td>
 				<td>${u.jenisName}</td>
-				<td class="right"><fmt:formatNumber value="${u.harga}" type="currency" currencySymbol="Rp " /></td>
+				<td class="right"><fmt:formatNumber value="${u.harga}"  currencySymbol="Rp " /></td>
 				<td><c:forEach items="${reff.listActive}" var="a"><c:if test="${a.key eq u.active}">${a.value}</c:if></c:forEach></td>
 				<td><fmt:formatDate value="${u.createdate}" pattern="dd-MM-yy (HH:mm:ss)"/></td>
 				<td>
