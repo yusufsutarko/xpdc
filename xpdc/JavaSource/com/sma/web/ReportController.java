@@ -185,7 +185,7 @@ public class ReportController extends ParentController{
 		
 		logger.debug("Halaman: Report " + jenisReport);
 		
-		Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, Object> params = new HashMap<String, Object>(); 
 		params.put("format", ServletRequestUtils.getStringParameter(request, "format", "pdf")); //format report, default = PDF
 		params.put("trans_id", trans_id);
 

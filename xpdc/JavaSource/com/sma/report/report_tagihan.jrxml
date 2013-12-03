@@ -94,7 +94,7 @@ ORDER BY a.tgl_stt, a.no_stt
 			<staticText>
 				<reportElement x="56" y="67" width="134" height="15"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Arial" size="11"/>
+					<font fontName="Arial" size="11" pdfFontName="Helvetica"/>
 				</textElement>
 				<text><![CDATA[Invoice Number : ]]></text>
 			</staticText>
@@ -108,7 +108,7 @@ ORDER BY a.tgl_stt, a.no_stt
 			<staticText>
 				<reportElement x="370" y="67" width="111" height="15"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Arial" size="11"/>
+					<font fontName="Arial" size="11" pdfFontName="Helvetica"/>
 				</textElement>
 				<text><![CDATA[Date Number : ]]></text>
 			</staticText>
@@ -122,7 +122,7 @@ ORDER BY a.tgl_stt, a.no_stt
 			<staticText>
 				<reportElement x="6" y="110" width="37" height="15"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Arial" size="11"/>
+					<font fontName="Arial" size="11" pdfFontName="Helvetica"/>
 				</textElement>
 				<text><![CDATA[From : ]]></text>
 			</staticText>
@@ -136,49 +136,49 @@ ORDER BY a.tgl_stt, a.no_stt
 			<staticText>
 				<reportElement x="6" y="129" width="214" height="15"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Arial" size="11"/>
+					<font fontName="Arial" size="11" pdfFontName="Helvetica"/>
 				</textElement>
 				<text><![CDATA[Jl. Peta Barat Ruko No. 88 G]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="6" y="143" width="214" height="15"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Arial" size="11"/>
+					<font fontName="Arial" size="11" pdfFontName="Helvetica"/>
 				</textElement>
 				<text><![CDATA[Cengkareng Jakarta Barat]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="6" y="157" width="72" height="15"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Arial" size="11"/>
+					<font fontName="Arial" size="11" pdfFontName="Helvetica"/>
 				</textElement>
 				<text><![CDATA[Phone / Fax   ]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="79" y="157" width="84" height="15"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Arial" size="11"/>
+					<font fontName="Arial" size="11" pdfFontName="Helvetica"/>
 				</textElement>
 				<text><![CDATA[: (021) 545 6461]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="6" y="171" width="72" height="15"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Arial" size="11"/>
+					<font fontName="Arial" size="11" pdfFontName="Helvetica"/>
 				</textElement>
 				<text><![CDATA[HP ]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="79" y="171" width="84" height="15"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Arial" size="11"/>
+					<font fontName="Arial" size="11" pdfFontName="Helvetica"/>
 				</textElement>
 				<text><![CDATA[: 0811 982 927]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="342" y="110" width="25" height="15"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Arial" size="11"/>
+					<font fontName="Arial" size="11" pdfFontName="Helvetica"/>
 				</textElement>
 				<text><![CDATA[To : ]]></text>
 			</staticText>
@@ -206,7 +206,7 @@ ORDER BY a.tgl_stt, a.no_stt
 					<pen lineWidth="0.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" size="11"/>
+					<font fontName="Arial" size="11" pdfFontName="Helvetica"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{no_stt}]]></textFieldExpression>
 			</textField>
@@ -216,7 +216,7 @@ ORDER BY a.tgl_stt, a.no_stt
 					<pen lineWidth="0.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" size="11"/>
+					<font fontName="Arial" size="11" pdfFontName="Helvetica"/>
 				</textElement>
 				<textFieldExpression class="java.util.Date"><![CDATA[$F{tgl_stt}]]></textFieldExpression>
 			</textField>
@@ -278,28 +278,28 @@ ORDER BY a.tgl_stt, a.no_stt
 			<staticText>
 				<reportElement x="352" y="130" width="186" height="15"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" size="11"/>
+					<font fontName="Arial" size="11" pdfFontName="Helvetica"/>
 				</textElement>
 				<text><![CDATA[Hormat Kami,]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="352" y="198" width="186" height="15"/>
 				<textElement textAlignment="Center">
-					<font fontName="Arial" size="11"/>
+					<font fontName="Arial" size="11" pdfFontName="Helvetica"/>
 				</textElement>
 				<text><![CDATA[( CV. Sukses Makmur Angkutan )]]></text>
 			</staticText>
 			<staticText>
 				<reportElement stretchType="RelativeToBandHeight" x="6" y="30" width="102" height="15"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Arial" size="11"/>
+					<font fontName="Arial" size="11" pdfFontName="Helvetica"/>
 				</textElement>
 				<text><![CDATA[Notes :]]></text>
 			</staticText>
 			<staticText>
 				<reportElement stretchType="RelativeToBandHeight" x="6" y="45" width="284" height="15"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Arial" size="11"/>
+					<font fontName="Arial" size="11" pdfFontName="Helvetica"/>
 				</textElement>
 				<text><![CDATA[Mohon Tagihan ini di transfer ke nomor rekening kami :]]></text>
 			</staticText>

@@ -9,7 +9,7 @@
 	</select>
 
 	<select id="selectTestDB" resultType="Int">
-		SELECT jenis FROM mst_master WHERE id = 0
+		SELECT jenis FROM mst_master WHERE id = 0   
 	</select>
 
 	<select id="selectDropDown" resultType="DropDown">

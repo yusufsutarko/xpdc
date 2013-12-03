@@ -64,7 +64,7 @@ AND a.id = $P{delivery_id}
 			<staticText>
 				<reportElement x="6" y="92" width="58" height="15"/>
 				<textElement>
-					<font fontName="Arial" size="10"/>
+					<font fontName="Arial" size="10" pdfFontName="Helvetica"/>
 				</textElement>
 				<text><![CDATA[Supir]]></text>
 			</staticText>
@@ -81,7 +81,7 @@ AND a.id = $P{delivery_id}
 			<staticText>
 				<reportElement x="6" y="77" width="58" height="15"/>
 				<textElement>
-					<font fontName="Arial" size="10"/>
+					<font fontName="Arial" size="10" pdfFontName="Helvetica"/>
 				</textElement>
 				<text><![CDATA[Mobil]]></text>
 			</staticText>
@@ -101,21 +101,21 @@ AND a.id = $P{delivery_id}
 			<staticText>
 				<reportElement x="345" y="3" width="205" height="19"/>
 				<textElement textAlignment="Right">
-					<font fontName="Arial" size="12" isBold="true" isUnderline="true" pdfFontName="Helvetica-Bold"/>
+					<font fontName="Arial" size="12" isBold="true" isItalic="true" isUnderline="true" pdfFontName="Helvetica-BoldOblique"/>
 				</textElement>
 				<text><![CDATA[RINCIAN BARANG TERKIRIM]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="410" y="78" width="73" height="15"/>
 				<textElement>
-					<font fontName="Arial" size="10"/>
+					<font fontName="Arial" size="10" pdfFontName="Helvetica"/>
 				</textElement>
 				<text><![CDATA[Tgl. Muat]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="410" y="93" width="73" height="15"/>
 				<textElement>
-					<font fontName="Arial" size="10"/>
+					<font fontName="Arial" size="10" pdfFontName="Helvetica"/>
 				</textElement>
 				<text><![CDATA[Tgl. Sampai]]></text>
 			</staticText>
@@ -131,8 +131,7 @@ AND a.id = $P{delivery_id}
 				<textElement markup="none">
 					<font fontName="Arial" size="10"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[": " + ( $F{tgl_sampai} == null ? "" : $P{REPORT_SCRIPTLET}.convertDateToString($F{tgl_sampai}, "dd/MM/yyyy") )
-]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[": " + ( $F{tgl_sampai} == null ? "" : $P{REPORT_SCRIPTLET}.convertDateToString($F{tgl_sampai}, "dd/MM/yyyy") )]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true" hyperlinkType="None">
 				<reportElement x="486" y="78" width="64" height="15"/>
@@ -186,7 +185,7 @@ AND a.id = $P{delivery_id}
 			<staticText>
 				<reportElement x="77" y="26" width="293" height="50"/>
 				<textElement textAlignment="Left" verticalAlignment="Top">
-					<font fontName="Arial" size="8" isBold="false"/>
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica"/>
 				</textElement>
 				<text><![CDATA[Kantor Pusat Jakarta: Jl. Peta Barat Ruko No 88 G, Cengkareng - Jakarta Barat
 Telp/Fax. (021) 5456461 HP. 0811 982 927
@@ -218,56 +217,56 @@ Telp. (0717) 425 6045 - 46 - 47 Fax. (0717) 431171]]></text>
 			<textField isBlankWhenNull="true" hyperlinkType="None">
 				<reportElement x="211" y="2" width="128" height="15"/>
 				<textElement verticalAlignment="Top">
-					<font fontName="Arial"/>
+					<font fontName="Arial" pdfFontName="Helvetica"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{nama_barang}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true" hyperlinkType="None">
 				<reportElement x="177" y="2" width="34" height="15"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
-					<font fontName="Arial"/>
+					<font fontName="Arial" pdfFontName="Helvetica"/>
 				</textElement>
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{colly}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true" hyperlinkType="None">
 				<reportElement x="339" y="2" width="34" height="15"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
-					<font fontName="Arial"/>
+					<font fontName="Arial" pdfFontName="Helvetica"/>
 				</textElement>
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{colly_naik}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true" hyperlinkType="None">
 				<reportElement x="373" y="2" width="34" height="15"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
-					<font fontName="Arial"/>
+					<font fontName="Arial" pdfFontName="Helvetica"/>
 				</textElement>
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{colly_sisa}]]></textFieldExpression>
 			</textField>
 			<textField hyperlinkType="None">
 				<reportElement x="6" y="2" width="58" height="15"/>
 				<textElement verticalAlignment="Top">
-					<font fontName="Arial"/>
+					<font fontName="Arial" pdfFontName="Helvetica"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{no_stt}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.##;(#,##0.##)" isBlankWhenNull="true" hyperlinkType="None">
 				<reportElement x="407" y="2" width="62" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Top" markup="none">
-					<font fontName="Arial"/>
+					<font fontName="Arial" pdfFontName="Helvetica"/>
 				</textElement>
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{nominal}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true" hyperlinkType="None">
 				<reportElement x="478" y="2" width="76" height="15"/>
 				<textElement verticalAlignment="Top">
-					<font fontName="Arial"/>
+					<font fontName="Arial" pdfFontName="Helvetica"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{note}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true" hyperlinkType="None">
 				<reportElement x="64" y="2" width="113" height="15"/>
 				<textElement verticalAlignment="Top">
-					<font fontName="Arial"/>
+					<font fontName="Arial" pdfFontName="Helvetica"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{penerima}]]></textFieldExpression>
 			</textField>
@@ -281,28 +280,28 @@ Telp. (0717) 425 6045 - 46 - 47 Fax. (0717) 431171]]></text>
 			<staticText>
 				<reportElement x="6" y="8" width="102" height="15"/>
 				<textElement textAlignment="Center">
-					<font fontName="Arial" size="10"/>
+					<font fontName="Arial" size="10" pdfFontName="Helvetica"/>
 				</textElement>
 				<text><![CDATA[Hormat Kami]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="6" y="53" width="102" height="15"/>
 				<textElement textAlignment="Center">
-					<font fontName="Arial" size="10"/>
+					<font fontName="Arial" size="10" pdfFontName="Helvetica"/>
 				</textElement>
 				<text><![CDATA[(                           )]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true" hyperlinkType="None">
 				<reportElement x="375" y="53" width="65" height="15"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
-					<font fontName="Arial" isBold="false"/>
+					<font fontName="Arial" isBold="false" pdfFontName="Helvetica"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA["Tgl Cetak :"]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd-MMM-yyyy [HH:mm:ss]" hyperlinkType="None">
 				<reportElement x="440" y="53" width="112" height="15"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
-					<font fontName="Arial" isBold="false"/>
+					<font fontName="Arial" isBold="false" pdfFontName="Helvetica"/>
 				</textElement>
 				<textFieldExpression class="java.util.Date"><![CDATA[new Date()]]></textFieldExpression>
 			</textField>
