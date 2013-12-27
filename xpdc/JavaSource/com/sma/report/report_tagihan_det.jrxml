@@ -7,7 +7,7 @@
 	<property name="com.jasperassistant.designer.GridHeight" value="12"/>
 	<property name="com.jasperassistant.designer.DataSource" value="xpdc"/>
 	<parameter name="trans_id" class="java.lang.Integer">
-		<defaultValueExpression><![CDATA[new Integer(2)]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[new Integer(15)]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[SELECT ad.urut, ad.nama_barang, g.keterangan satuan, ad.qty qty_detail, ad.harga harga_detail, ad.colly colly_detail
@@ -79,7 +79,9 @@ ORDER BY ad.urut
 				<textElement verticalAlignment="Middle" markup="none">
 					<font pdfFontName="Helvetica"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["( " + $F{qty_detail} + " " + $F{satuan} + " x Rp. " + $P{REPORT_SCRIPTLET}.formatNumber($F{harga_detail}) + " )"]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA["( " + $P{REPORT_SCRIPTLET}.formatCurrencyQty("", $F{qty_detail}) + " " + $F{satuan} + " x Rp. " + $P{REPORT_SCRIPTLET}.formatNumber($F{harga_detail}) + " )"
+
+]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true" hyperlinkType="None">
 				<reportElement x="0" y="17" width="44" height="16"/>

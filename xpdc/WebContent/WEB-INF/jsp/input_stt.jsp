@@ -265,7 +265,7 @@ ${sessionScope.currentUser.menuAkses}
 						<thead>
 						<tr>
 							<th>No</th>
-							<th title="Jumlah Colly/Dus">Colly/Dus<span class="mandatory">*</span></th>
+							<th title="Colly/Dus">Colly/Dus<span class="mandatory">*</span></th>
 							<th title="Nama Barang">Nama Barang<span class="mandatory">*</span></th>
 							<th title="Satuan">Satuan<span class="mandatory">*</span></th>
 							<th title="Jumlah barang">Qty<span class="mandatory">*</span></th>
@@ -280,13 +280,13 @@ ${sessionScope.currentUser.menuAkses}
 						<tr>
 							<td><form:input path="listTransDet[${s.index}].urut" size="2" readonly="true" tabindex="-1" /></td>
 							<td>
-								<form:input path="listTransDet[${s.index}].colly" size="6" cssClass="nominal" onchange="hitung();" cssErrorClass="fieldError" />
+								<form:input path="listTransDet[${s.index}].colly" size="6" cssClass="nominalqty" onchange="hitung();" cssErrorClass="fieldError" />
 								<form:hidden path="listTransDet[${s.index}].colly_remain" />
 								<form:hidden path="listTransDet[${s.index}].colly_naik" />
 							</td>
 							<td><form:input path="listTransDet[${s.index}].nama_barang" cssClass="barang" cssErrorClass="barang fieldError"/></td>
 							<td><form:select path="listTransDet[${s.index}].satuan_id" items="${reff.listSatuan}" itemValue="key" itemLabel="value"/></td>
-							<td><form:input path="listTransDet[${s.index}].qty" cssClass="nominal" onchange="hitung();" cssErrorClass="fieldError"/></td>
+							<td><form:input path="listTransDet[${s.index}].qty" cssClass="nominalqty" onchange="hitung();" cssErrorClass="fieldError"/></td>
 							<td><form:input path="listTransDet[${s.index}].harga" cssClass="nominal" onchange="hitung();" cssErrorClass="fieldError"/></td>
 							<td><form:input path="listTransDet[${s.index}].jumlah" readonly="true" tabindex="-1" cssClass="right jumlah"/></td>
 							<td><form:checkbox path="listTransDet[${s.index}].flag" value="true" /></td>

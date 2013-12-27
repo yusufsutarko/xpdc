@@ -7,7 +7,7 @@
 	<property name="com.jasperassistant.designer.GridWidth" value="12"/>
 	<property name="com.jasperassistant.designer.GridHeight" value="12"/>
 	<parameter name="customer_id" class="java.lang.Long">
-		<defaultValueExpression><![CDATA[new Integer(2)]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[new Long(2)]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[SELECT a.no_stt, a.tgl_stt, a.customer_id, a.total_harga - a.potongan total_harga, a.remain
@@ -16,7 +16,7 @@ WHERE (CASE WHEN (a.cabang_id = a.pay_mode) or a.pay_mode = 0 THEN a.customer_id
 ORDER BY a.tgl_stt
 ;]]>
 	</queryString>
-	<field name="customer_id" class="java.lang.Integer"/>
+	<field name="customer_id" class="java.lang.Long"/>
 	<field name="no_stt" class="java.lang.String"/>
 	<field name="remain" class="java.math.BigDecimal"/>
 	<field name="tgl_stt" class="java.util.Date"/>

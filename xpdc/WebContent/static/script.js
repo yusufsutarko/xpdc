@@ -58,12 +58,20 @@ $().ready(function(){
 		}
 	});	
 	
-	//untuk semua input yg mempunyai class "nominal" akan diformat 3 digit secara otomatis, dan di-align right
+	//untuk semua input yg mempunyai class "nominal" akan diformat 2 digit secara otomatis, dan di-align right
 	$(".nominal").change(function(){
 		$(this).val(formatCurrency($(this).val()));
 		 $("#nominal").text("");
 	}).keyup(function(){
 		 $("#nominal").text(formatCurrency($(this).val()));
+	}).addClass("right");
+	
+	//untuk semua input yg mempunyai class "nominalqty" akan diformat 3 digit secara otomatis, dan di-align right
+	$(".nominalqty").change(function(){
+		$(this).val(formatCurrencyQty($(this).val()));
+		 $("#nominalqty").text("");
+	}).keyup(function(){
+		 $("#nominalqty").text(formatCurrencyQty($(this).val()));
 	}).addClass("right");
 	
 	//untuk semua input text yg namanya "search", bila pencet enter, submit form

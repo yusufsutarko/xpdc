@@ -164,7 +164,26 @@ public class ReportController extends ParentController{
 			
 			exporter.exportReport();
 			return null;
+
+		//HTML File yg langsung print
+		}else if(format.equalsIgnoreCase("htmlprint")){
+			JRHtmlExporter exporter = new JRHtmlExporter();
 			
+			exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+			exporter.setParameter(JRExporterParameter.OUTPUT_WRITER, response.getWriter());
+			//HTML Specific parameters
+			exporter.setParameter(JRHtmlExporterParameter.IMAGES_URI, request.getContextPath() + "/jasper/image?image=");
+			exporter.setParameter(JRHtmlExporterParameter.IGNORE_PAGE_MARGINS, true); //biar gak terlalu banyak white space
+			exporter.setParameter(JRHtmlExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, true); //biar gak terlalu banyak white space
+			exporter.setParameter(JRHtmlExporterParameter.BETWEEN_PAGES_HTML, ""); //biar tidak ada paging (khusus html)
+
+			//exporter.setParameter(JRHtmlExporterParameter.HTML_HEADER, "<html><head><script>window.print();</script><style>@page{size:auto !important; margin: 0mm !important;} span{font-size: 0.8em !important; font-family: \"Courier New\", Courier, monospace !important;} table{width: 100% !important;}</style></head><body>");
+			exporter.setParameter(JRHtmlExporterParameter.HTML_HEADER, "<html><head><script>window.print();</script><style>@page{size:auto !important; margin: 0mm !important;} span{font-size: 0.7em !important; } table{width: 100% !important;}</style></head><body>");
+			exporter.setParameter(JRHtmlExporterParameter.HTML_FOOTER, "</body></html>");
+			
+			exporter.exportReport();
+			return null;				
+
 		//format selain HTML dan TXT
 		}else{
 			return "redirect:/jasper/" + format; //redirect ke JasperReports Servlet sesuai format
@@ -180,34 +199,54 @@ public class ReportController extends ParentController{
 		User currentUser = (User) session.getAttribute("currentUser");
 		
 		//jenis report
-		String jenisReport = "print_stt";
-		if(flag == 0) jenisReport = "print_stt_blank";
+		String jenisReport = "";
+		if(flag == 0) {
+			jenisReport = "print_stt_blank_pdf";
+		}else if(flag == 1) {
+			jenisReport = "print_stt_pdf";
+		}else if(flag == 2) {
+			jenisReport = "print_stt_blank";
+		}else if(flag == 3) {
+			jenisReport = "print_stt";
+		}
 		
 		logger.debug("Halaman: Report " + jenisReport);
 		
 		Map<String, Object> params = new HashMap<String, Object>(); 
-		params.put("format", ServletRequestUtils.getStringParameter(request, "format", "pdf")); //format report, default = PDF
+		if(flag == 0 || flag == 1) {
+			params.put("format", ServletRequestUtils.getStringParameter(request, "format", "pdf")); //format report, default = PDF
+		}else{
+			params.put("format", ServletRequestUtils.getStringParameter(request, "format", "htmlprint")); //format report, default = htmlprint (html yg lgsg print)				
+		}
 		params.put("trans_id", trans_id);
 
 		return generateReport(jenisReport, params, session, request, response);
 	}
 
 	//print RBT
-	@RequestMapping(value="/rbt/{delivery_id}")
-	public String rbt(@PathVariable Integer delivery_id, HttpSession session, HttpServletRequest request, HttpServletResponse response) 
+	@RequestMapping(value="/rbt/{delivery_id}/{flag}")
+	public String rbt(@PathVariable Integer delivery_id, @PathVariable Integer flag, HttpSession session, HttpServletRequest request, HttpServletResponse response) 
 			throws JRException, IOException, ServletRequestBindingException {
 		
 		//currently logged in user
 		User currentUser = (User) session.getAttribute("currentUser");
 		
 		//jenis report
-		String jenisReport = "print_rincian_barang";
+		String jenisReport = "";
+		if(flag == 0) {
+			jenisReport = "print_rincian_barang_pdf"; 
+		}else{
+			jenisReport = "print_rincian_barang";
+		}
 		
 		logger.debug("Halaman: Report " + jenisReport);
 		
 		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("format", ServletRequestUtils.getStringParameter(request, "format", "pdf")); //format report, default = PDF
-		params.put("delivery_id", delivery_id);
+		if(flag == 0) {
+			params.put("format", ServletRequestUtils.getStringParameter(request, "format", "pdf")); //format report, default = PDF
+		}else{
+			params.put("format", ServletRequestUtils.getStringParameter(request, "format", "htmlprint")); //format report, default = htmlprint (html yg lgsg print)				
+		}params.put("delivery_id", delivery_id);
 
 		return generateReport(jenisReport, params, session, request, response);
 	}

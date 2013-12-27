@@ -8,7 +8,8 @@
 function cetak(id){
 	
 	var format = $("#format").val();
-	
+
+	//cetak pdf
 	$("#pdfDialog").attr("src", "${path}/loading"); //tampilkan loading message dulu, siapa tau agak lambat
 	$("#printDialog").dialog({
 		modal: true,

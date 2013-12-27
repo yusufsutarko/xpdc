@@ -6,6 +6,13 @@
 <%@ include file="/WEB-INF/jsp/include_head.jsp"%>
 <script type="text/javascript">
 function cetak(id, flag){
+	//cetak html
+	if(flag == 2 || flag == 3){
+		window.open("${path}/report/stt/" + id + "/" + flag);
+		return false;
+	}
+
+	//cetak pdf
 	$("#pdfDialog").attr("src", "${path}/loading"); //tampilkan loading message dulu, siapa tau agak lambat
 	$("#printDialog").dialog({
 		modal: true,
@@ -96,6 +103,9 @@ ${sessionScope.currentUser.menuAkses}
 							<button onclick="window.location='${path}/transaksi/stt/update/${t.id}'; return false;">Rubah</button>
 							<button onclick="cetak(${t.id}, 0); return false;">Cetak Kosong</button>
 							<button onclick="cetak(${t.id}, 1); return false;">Cetak</button>
+<!-- 							<button onclick="cetak(${t.id}, 2); return false;">Cetak Kosong</button> -->
+<!-- 							<button onclick="cetak(${t.id}, 3); return false;">Cetak Text</button> -->
+							
 <!-- 		<p> -->
 <!-- 			<input type="hidden" name="show" value="1"> -->
 <!-- 			<button onclick="form.submit(); return false;">Cetak</button> -->

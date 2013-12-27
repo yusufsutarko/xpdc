@@ -267,7 +267,7 @@ ORDER BY a.tgl_stt, a.no_stt
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{nama_barang}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0" hyperlinkType="None">
+			<textField pattern="#,###0.###;(#,###0.###)" hyperlinkType="None">
 				<reportElement x="531" y="0" width="58" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{qty}]]></textFieldExpression>

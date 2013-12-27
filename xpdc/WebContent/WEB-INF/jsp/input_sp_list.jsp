@@ -5,7 +5,14 @@
 <title>XPDC</title>
 <%@ include file="/WEB-INF/jsp/include_head.jsp"%>
 <script type="text/javascript">
-function cetak(id){
+function cetak(id, flag){
+	//cetak html
+	if(flag == 1){
+		window.open("${path}/report/rbt/" + id + "/" + flag);
+		return false;
+	}
+	
+	//cetak pdf
 	$("#pdfDialog").attr("src", "${path}/loading"); //tampilkan loading message dulu, siapa tau agak lambat
 	$("#printDialog").dialog({
 		modal: true,
@@ -13,7 +20,7 @@ function cetak(id){
 		minWidth: 800,
 		minHeight: 600
 	});	
-	$("#pdfDialog").attr("src", "${path}/report/rbt/" + id); //baru tampilkan isinya
+	$("#pdfDialog").attr("src", "${path}/report/rbt/" + id + "/" + flag); //baru tampilkan isinya
 }
 </script>
 </head>
@@ -78,7 +85,8 @@ ${sessionScope.currentUser.menuAkses}
 					<c:choose>
 						<c:when test="${d.cancel eq 0}">
 							<button onclick="window.location='${path}/transaksi/sp/update/${d.id}'; return false;">Rubah</button>
-							<button onclick="cetak(${d.id}); return false;">Cetak</button>
+							<button onclick="cetak(${d.id}, 0); return false;">Cetak</button>
+<!-- 							<button onclick="cetak(${d.id}, 1); return false;">Cetak Text</button> -->
 						</c:when>
 						<c:when test="${d.cancel eq 1}">
 							<button onclick="window.location='${path}/transaksi/sp/update/${d.id}'; return false;">Lihat</button>

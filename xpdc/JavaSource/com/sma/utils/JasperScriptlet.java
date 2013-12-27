@@ -48,6 +48,14 @@ public class JasperScriptlet extends JRDefaultScriptlet {
 		}
 	}
 
+	public String formatCurrencyQty(String currency, BigDecimal amount) {
+		if (amount == null){
+			return "-";
+		}else{
+			return (currency != null ? currency : "") + new DecimalFormat("#,###0.###;(#,###0.###)").format(amount);
+		}
+	}
+
 	public String formatNumber(BigDecimal amount) {
 		if (amount == null)
 			return "";
