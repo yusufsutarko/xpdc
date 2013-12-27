@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created using JasperAssistant (http://www.jasperassistant.com) -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="print_rincian_barang_biaya" pageWidth="612" pageHeight="791" columnWidth="612" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" scriptletClass="com.sma.utils.JasperScriptlet">
+	<property name="com.jasperassistant.designer.Grid" value="false"/>
+	<property name="com.jasperassistant.designer.SnapToGrid" value="false"/>
+	<property name="com.jasperassistant.designer.GridWidth" value="12"/>
+	<property name="com.jasperassistant.designer.GridHeight" value="12"/>
+	<property name="com.jasperassistant.designer.DataSource" value="xpdc"/>
+	<parameter name="delivery_id" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[new Integer(20)]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT dc.*, b.nama namabiaya
+FROM mst_delivery_cost dc
+	 LEFT JOIN lst_biaya b ON dc.biaya_id = b.id
+WHERE dc.delivery_id = $P{delivery_id}
+ORDER BY b.nama
+;]]>
+	</queryString>
+	<field name="biaya_id" class="java.lang.Integer"/>
+	<field name="delivery_id" class="java.lang.Integer"/>
+	<field name="namabiaya" class="java.lang.String"/>
+	<field name="nominal" class="java.math.BigDecimal"/>
+	<field name="note" class="java.lang.String"/>
+	<variable name="tot_nominal" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[new BigDecimal($F{nominal}.doubleValue())]]></variableExpression>
+	</variable>
+	<title>
+		<band/>
+	</title>
+	<detail>
+		<band height="17">
+			<textField hyperlinkType="None">
+				<reportElement positionType="Float" x="0" y="1" width="115" height="16"/>
+				<box topPadding="0" leftPadding="2" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font pdfFontName="Helvetica"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{namabiaya}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.##" hyperlinkType="None">
+				<reportElement positionType="Float" x="138" y="1" width="78" height="16"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="2">
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font pdfFontName="Helvetica"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{nominal}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="115" y="1" width="23" height="16"/>
+				<box topPadding="0" leftPadding="1" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="11" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<text><![CDATA[Rp.]]></text>
+			</staticText>
+			<textField>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="220" y="1" width="152" height="16"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{note}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band/>
+	</pageFooter>
+	<summary>
+		<band height="20">
+			<line>
+				<reportElement x="114" y="2" width="104" height="1"/>
+			</line>
+			<textField pattern="#,##0.##">
+				<reportElement x="138" y="4" width="78" height="16"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{tot_nominal}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="116" y="4" width="23" height="16"/>
+				<box topPadding="0" leftPadding="1" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="11" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<text><![CDATA[Rp.]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>
