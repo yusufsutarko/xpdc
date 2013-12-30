@@ -101,10 +101,10 @@ ${sessionScope.currentUser.menuAkses}
 					<c:choose>
 						<c:when test="${t.cancel eq 0}">
 							<button onclick="window.location='${path}/transaksi/stt/update/${t.id}'; return false;">Rubah</button>
-							<button onclick="cetak(${t.id}, 0); return false;">Cetak Kosong</button>
-							<button onclick="cetak(${t.id}, 1); return false;">Cetak</button>
-<!-- 							<button onclick="cetak(${t.id}, 2); return false;">Cetak Kosong</button> -->
-<!-- 							<button onclick="cetak(${t.id}, 3); return false;">Cetak Text</button> -->
+<!-- 							<button onclick="cetak(${t.id}, 0); return false;">Cetak Kosong</button> -->
+<!-- 							<button onclick="cetak(${t.id}, 1); return false;">Cetak</button> -->
+							<button onclick="cetak(${t.id}, 2); return false;">Cetak Kosong</button>
+							<button onclick="cetak(${t.id}, 3); return false;">Cetak Text</button>
 							
 <!-- 		<p> -->
 <!-- 			<input type="hidden" name="show" value="1"> -->

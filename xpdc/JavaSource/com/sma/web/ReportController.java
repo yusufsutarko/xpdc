@@ -177,8 +177,8 @@ public class ReportController extends ParentController{
 			exporter.setParameter(JRHtmlExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, true); //biar gak terlalu banyak white space
 			exporter.setParameter(JRHtmlExporterParameter.BETWEEN_PAGES_HTML, ""); //biar tidak ada paging (khusus html)
 
-			//exporter.setParameter(JRHtmlExporterParameter.HTML_HEADER, "<html><head><script>window.print();</script><style>@page{size:auto !important; margin: 0mm !important;} span{font-size: 0.8em !important; font-family: \"Courier New\", Courier, monospace !important;} table{width: 100% !important;}</style></head><body>");
-			exporter.setParameter(JRHtmlExporterParameter.HTML_HEADER, "<html><head><script>window.print();</script><style>@page{size:auto !important; margin: 0mm !important;} span{font-size: 0.7em !important; } table{width: 100% !important;}</style></head><body>");
+//			exporter.setParameter(JRHtmlExporterParameter.HTML_HEADER, "<html><head><script>window.print();</script><style>@page{size:auto !important; margin: 0mm !important;} span{font-size: 0.8em !important; font-family: Courier !important;} table{width: 100% !important;}</style></head><body>");
+			exporter.setParameter(JRHtmlExporterParameter.HTML_HEADER, "<html><head><script>window.print();</script><style>@page{size:auto !important; margin: 0mm !important;} span{font-size: 0.8em !important; font-family: \"Sans Serif\" !important;} table{width: 100% !important;}</style></head><body>");
 			exporter.setParameter(JRHtmlExporterParameter.HTML_FOOTER, "</body></html>");
 			
 			exporter.exportReport();
