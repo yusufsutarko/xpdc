@@ -173,12 +173,13 @@ public class ReportController extends ParentController{
 			exporter.setParameter(JRExporterParameter.OUTPUT_WRITER, response.getWriter());
 			//HTML Specific parameters
 			exporter.setParameter(JRHtmlExporterParameter.IMAGES_URI, request.getContextPath() + "/jasper/image?image=");
-			exporter.setParameter(JRHtmlExporterParameter.IGNORE_PAGE_MARGINS, true); //biar gak terlalu banyak white space
-			exporter.setParameter(JRHtmlExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, true); //biar gak terlalu banyak white space
+			//exporter.setParameter(JRHtmlExporterParameter.IGNORE_PAGE_MARGINS, true); //biar gak terlalu banyak white space
+			//exporter.setParameter(JRHtmlExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, true); //biar gak terlalu banyak white space
 			exporter.setParameter(JRHtmlExporterParameter.BETWEEN_PAGES_HTML, ""); //biar tidak ada paging (khusus html)
 
-//			exporter.setParameter(JRHtmlExporterParameter.HTML_HEADER, "<html><head><script>window.print();</script><style>@page{size:auto !important; margin: 0mm !important;} span{font-size: 0.8em !important; font-family: Courier !important;} table{width: 100% !important;}</style></head><body>");
-			exporter.setParameter(JRHtmlExporterParameter.HTML_HEADER, "<html><head><script>window.print();</script><style>@page{size:auto !important; margin: 0mm !important;} span{font-size: 0.8em !important; font-family: \"Sans Serif\" !important;} table{width: 100% !important;}</style></head><body>");
+			exporter.setParameter(JRHtmlExporterParameter.HTML_HEADER, "<html><head><script>window.print();</script><style>@page{size:auto !important; margin-top: 5mm !important; margin-left: 0mm !important; margin-right: 0mm !important; margin-bottom: 0mm !important;} span{font-size: 0.8em !important; font-family: Courier !important;} table{width: 100% !important;}</style></head><body>");
+//			exporter.setParameter(JRHtmlExporterParameter.HTML_HEADER, "<html><head><script>window.print();</script><style>@page{size:auto !important; margin: 0mm !important;} span{font-size: 0.8em !important; font-family: \"Sans Serif\" !important;} table{width: 100% !important;}</style></head><body>");
+//			exporter.setParameter(JRHtmlExporterParameter.HTML_HEADER, "<html><head><script>window.print();</script><style></style></head><body>");
 			exporter.setParameter(JRHtmlExporterParameter.HTML_FOOTER, "</body></html>");
 			
 			exporter.exportReport();
