@@ -104,7 +104,7 @@ ${sessionScope.currentUser.menuAkses}
 <!-- 							<button onclick="cetak(${t.id}, 0); return false;">Cetak Kosong</button> -->
 <!-- 							<button onclick="cetak(${t.id}, 1); return false;">Cetak</button> -->
 							<button onclick="cetak(${t.id}, 2); return false;">Cetak Kosong</button>
-							<button onclick="cetak(${t.id}, 3); return false;">Cetak Text</button>
+							<button onclick="cetak(${t.id}, 3); return false;">Cetak</button>
 							
 <!-- 		<p> -->
 <!-- 			<input type="hidden" name="show" value="1"> -->

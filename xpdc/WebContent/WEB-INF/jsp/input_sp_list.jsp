@@ -85,8 +85,8 @@ ${sessionScope.currentUser.menuAkses}
 					<c:choose>
 						<c:when test="${d.cancel eq 0}">
 							<button onclick="window.location='${path}/transaksi/sp/update/${d.id}'; return false;">Rubah</button>
-							<button onclick="cetak(${d.id}, 0); return false;">Cetak</button>
-<!-- 							<button onclick="cetak(${d.id}, 1); return false;">Cetak Text</button> -->
+<!-- 							<button onclick="cetak(${d.id}, 0); return false;">Cetak</button> -->
+							<button onclick="cetak(${d.id}, 1); return false;">Cetak</button>
 						</c:when>
 						<c:when test="${d.cancel eq 1}">
 							<button onclick="window.location='${path}/transaksi/sp/update/${d.id}'; return false;">Lihat</button>
