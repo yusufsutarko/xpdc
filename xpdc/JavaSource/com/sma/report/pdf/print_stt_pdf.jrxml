@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created using JasperAssistant (http://www.jasperassistant.com) -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="print_stt_pdf" pageWidth="612" pageHeight="397" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="30" bottomMargin="30" scriptletClass="com.sma.utils.JasperScriptlet">
+	<property name="com.jasperassistant.designer.Grid" value="false"/>
+	<property name="com.jasperassistant.designer.SnapToGrid" value="false"/>
+	<property name="com.jasperassistant.designer.GridWidth" value="12"/>
+	<property name="com.jasperassistant.designer.GridHeight" value="12"/>
+	<property name="com.jasperassistant.designer.DataSource" value="xpdc"/>
+	<parameter name="trans_id" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[new Integer(15)]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT a.*, b.urut, b.barang_id, b.nama_barang, b.satuan_id, b.qty, b.harga, b.colly colly_det, b.colly_remain, 
+c.keterangan cara_bayar, d.keterangan nama_satuan, 
+pengirim.nama customer, pengirim.alamat alamat, pengirim.kota kota, pengirim.no_telp no_telp, pengirim.no_hp no_hp, 
+penerima.nama tujuan, penerima.alamat alamat2, penerima.kota kota2, penerima.no_telp no_telp2, penerima.no_hp no_hp2
+FROM mst_trans a 
+	 LEFT JOIN lst_config c ON a.pay_mode = c.jenis AND c.id = 1
+	 LEFT JOIN mst_customer pengirim ON a.customer_id = pengirim.id
+	 LEFT JOIN mst_customer penerima ON a.tujuan_id = penerima.id,
+	 mst_trans_det b 
+	 LEFT JOIN lst_config d ON b.satuan_id = d.jenis AND d.id = 3
+WHERE a.id = b.trans_id
+AND a.id = $P{trans_id}
+;]]>
+	</queryString>
+	<field name="alamat" class="java.lang.String"/>
+	<field name="alamat2" class="java.lang.String"/>
+	<field name="alamat_tujuan" class="java.lang.String"/>
+	<field name="barang_id" class="java.lang.Integer"/>
+	<field name="cabang_id" class="java.lang.Integer"/>
+	<field name="cancel" class="java.lang.Boolean"/>
+	<field name="cancelby" class="java.lang.Integer"/>
+	<field name="canceldate" class="java.sql.Timestamp"/>
+	<field name="cara_bayar" class="java.lang.String"/>
+	<field name="colly" class="java.math.BigDecimal"/>
+	<field name="colly_det" class="java.math.BigDecimal"/>
+	<field name="colly_remain" class="java.math.BigDecimal"/>
+	<field name="contact_tujuan" class="java.lang.String"/>
+	<field name="createby" class="java.lang.Integer"/>
+	<field name="createdate" class="java.sql.Timestamp"/>
+	<field name="customer" class="java.lang.String"/>
+	<field name="customer_id" class="java.lang.Integer"/>
+	<field name="harga" class="java.math.BigDecimal"/>
+	<field name="id" class="java.lang.Integer"/>
+	<field name="kota" class="java.lang.String"/>
+	<field name="kota2" class="java.lang.String"/>
+	<field name="modifyby" class="java.lang.Integer"/>
+	<field name="modifydate" class="java.sql.Timestamp"/>
+	<field name="nama_barang" class="java.lang.String"/>
+	<field name="nama_satuan" class="java.lang.String"/>
+	<field name="no_hp" class="java.lang.String"/>
+	<field name="no_hp2" class="java.lang.String"/>
+	<field name="no_stt" class="java.lang.String"/>
+	<field name="no_telp" class="java.lang.String"/>
+	<field name="no_telp2" class="java.lang.String"/>
+	<field name="note" class="java.lang.String"/>
+	<field name="pay_mode" class="java.lang.Integer"/>
+	<field name="potongan" class="java.math.BigDecimal"/>
+	<field name="qty" class="java.math.BigDecimal"/>
+	<field name="remain" class="java.math.BigDecimal"/>
+	<field name="satuan_id" class="java.lang.Integer"/>
+	<field name="telp_tujuan" class="java.lang.String"/>
+	<field name="tgl_kirim_est" class="java.util.Date"/>
+	<field name="tgl_stt" class="java.util.Date"/>
+	<field name="total_harga" class="java.math.BigDecimal"/>
+	<field name="tujuan" class="java.lang.String"/>
+	<field name="tujuan_id" class="java.lang.Integer"/>
+	<field name="urut" class="java.lang.Integer"/>
+	<variable name="tot_jumlah" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[new BigDecimal($F{harga}.doubleValue() * $F{qty}.doubleValue())]]></variableExpression>
+	</variable>
+	<variable name="total" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[new BigDecimal($F{total_harga}.doubleValue() - $F{potongan}.doubleValue())]]></variableExpression>
+	</variable>
+	<title>
+		<band/>
+	</title>
+	<pageHeader>
+		<band height="187">
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true" hyperlinkType="None">
+				<reportElement positionType="Float" x="469" y="46" width="83" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="true" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{tgl_stt}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="438" y="46" width="29" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="true" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Tgl. :]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="Float" x="0" y="165" width="556" height="1"/>
+			</line>
+			<staticText>
+				<reportElement positionType="Float" x="48" y="166" width="192" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="11" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Barang]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="438" y="26" width="29" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="true" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[No. :]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true" hyperlinkType="None">
+				<reportElement positionType="Float" x="66" y="128" width="341" height="17"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Arial" isBold="true" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": " + $F{tujuan} + ( $F{no_telp2} == null  ? "" : " ( No Telp : " + $F{no_telp2} + " ) " )]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true" hyperlinkType="None">
+				<reportElement positionType="Float" x="469" y="26" width="83" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="true" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{no_stt}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement positionType="Float" x="0" y="162" width="556" height="1"/>
+			</line>
+			<line>
+				<reportElement positionType="Float" x="0" y="186" width="556" height="1"/>
+			</line>
+			<staticText>
+				<reportElement positionType="Float" x="356" y="166" width="92" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="11" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Harga]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="338" y="3" width="214" height="23"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font fontName="Arial" size="14" isBold="true" isItalic="true" isUnderline="true" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[SURAT TANDA TERIMA (STT)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="410" y="128" width="73" height="17"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Arial" size="10" pdfFontName="Helvetica" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Pembayaran]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="410" y="145" width="73" height="17"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Arial" size="10" pdfFontName="Helvetica" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Total Colly]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="244" y="166" width="49" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="11" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Quantity]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="452" y="166" width="98" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="11" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Jumlah]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true" hyperlinkType="None">
+				<reportElement positionType="Float" x="486" y="145" width="64" height="17"/>
+				<textElement verticalAlignment="Top" markup="none">
+					<font fontName="Arial" size="10" pdfFontName="Helvetica" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": " + $F{colly}]]></textFieldExpression>
+			</textField>
+			<textField hyperlinkType="None">
+				<reportElement positionType="Float" x="486" y="128" width="64" height="17"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Arial" pdfFontName="Helvetica" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": " + $F{cara_bayar}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true" hyperlinkType="None">
+				<reportElement positionType="Float" x="7" y="94" width="58" height="17"/>
+				<textElement verticalAlignment="Top" markup="none">
+					<font fontName="Arial" pdfFontName="Helvetica" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Pengirim"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true" hyperlinkType="None">
+				<reportElement positionType="Float" x="7" y="128" width="58" height="17"/>
+				<textElement verticalAlignment="Top" markup="none">
+					<font fontName="Arial" pdfFontName="Helvetica" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Penerima"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="6" y="166" width="39" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="11" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Colly]]></text>
+			</staticText>
+			<image hyperlinkType="None">
+				<reportElement positionType="Float" x="4" y="3" width="64" height="64"/>
+				<imageExpression class="java.lang.String"><![CDATA["com/sma/images/logo.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement positionType="Float" x="71" y="3" width="248" height="16"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font fontName="Arial" size="12" isBold="true" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[CV. SUKSES MAKMUR ANGKUTAN (SMA)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="71" y="19" width="248" height="13"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font fontName="Arial" size="10" isBold="true" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[ANGKUTAN JAKARTA - BANGKA PP]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true" hyperlinkType="None">
+				<reportElement positionType="Float" x="66" y="94" width="341" height="17"/>
+				<textElement verticalAlignment="Top" markup="none">
+					<font fontName="Arial" isBold="true" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": " + $F{customer}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true" hyperlinkType="None">
+				<reportElement positionType="Float" x="7" y="111" width="58" height="17"/>
+				<textElement verticalAlignment="Top" markup="none">
+					<font fontName="Arial" pdfFontName="Helvetica" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Alamat"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true" hyperlinkType="None">
+				<reportElement positionType="Float" x="7" y="145" width="58" height="17"/>
+				<textElement verticalAlignment="Top" markup="none">
+					<font fontName="Arial" pdfFontName="Helvetica" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Alamat"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true" hyperlinkType="None">
+				<reportElement positionType="Float" x="66" y="111" width="341" height="17"/>
+				<textElement verticalAlignment="Top" markup="none">
+					<font fontName="Arial" isBold="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": " + $F{alamat} + " - " + $F{kota}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true" hyperlinkType="None">
+				<reportElement positionType="Float" x="66" y="145" width="341" height="17"/>
+				<textElement verticalAlignment="Top" markup="none">
+					<font fontName="Arial" isBold="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": " + $F{alamat2} + " - " + $F{kota2}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="71" y="32" width="362" height="13"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font fontName="Arial" size="10" isBold="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Kantor Pusat Jakarta: Jl. Peta Barat Ruko No 88 G, Cengkareng - Jakarta Barat]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="71" y="45" width="362" height="13"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font fontName="Arial" size="10" isBold="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Telp/Fax. (021) 5456461 HP. 0811 982 927]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="71" y="58" width="362" height="13"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font fontName="Arial" size="10" isBold="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Cab. Pangkal Pinang: Jl. Depati Hamzah No. 36 Air Itam]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="71" y="71" width="362" height="23"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font fontName="Arial" size="10" isBold="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Telp. (0717) 425 6045 - 46 - 47 Fax. (0717) 431171]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="18">
+			<textField isBlankWhenNull="true" hyperlinkType="None">
+				<reportElement positionType="Float" x="48" y="1" width="192" height="17"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" pdfFontName="Helvetica" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{nama_barang}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,###0.###;(#,###0.###)" isBlankWhenNull="true" hyperlinkType="None">
+				<reportElement positionType="Float" x="244" y="1" width="49" height="17"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" pdfFontName="Helvetica" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{qty}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true" hyperlinkType="None">
+				<reportElement positionType="Float" x="294" y="1" width="58" height="17"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" pdfFontName="Helvetica" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{nama_satuan}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.##;(#,##0.##)" hyperlinkType="None">
+				<reportElement positionType="Float" x="356" y="1" width="92" height="17"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" pdfFontName="Helvetica" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{harga}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.##;(#,##0.##)" hyperlinkType="None">
+				<reportElement positionType="Float" x="452" y="1" width="98" height="17"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" pdfFontName="Helvetica" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{tot_jumlah}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true" hyperlinkType="None">
+				<reportElement positionType="Float" x="6" y="1" width="39" height="17"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" pdfFontName="Helvetica" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{colly_det}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band/>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="94">
+			<line>
+				<reportElement positionType="Float" x="0" y="1" width="556" height="1"/>
+			</line>
+			<staticText>
+				<reportElement positionType="Float" x="6" y="2" width="73" height="32"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Arial" size="10" pdfFontName="Helvetica" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Keterangan :]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true" hyperlinkType="None">
+				<reportElement positionType="Float" x="79" y="2" width="271" height="32"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Arial" size="10" pdfFontName="Helvetica" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{note}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="6" y="34" width="127" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="10" pdfFontName="Helvetica" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Hormat Kami]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="6" y="49" width="127" height="45"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="Arial" size="10" pdfFontName="Helvetica" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[(                           )]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="371" y="2" width="51" height="17"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="10" pdfFontName="Helvetica" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Pot.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="371" y="20" width="51" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="12" isBold="true" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<textField pattern="#,##0.##;(#,##0.##)" hyperlinkType="None">
+				<reportElement positionType="Float" x="452" y="2" width="98" height="17"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="10" pdfFontName="Helvetica" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{potongan}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.##;(#,##0.##)" hyperlinkType="None">
+				<reportElement positionType="Float" x="452" y="20" width="98" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="12" isBold="true" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{total}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement positionType="Float" x="371" y="19" width="184" height="1"/>
+			</line>
+			<line>
+				<reportElement positionType="Float" x="371" y="40" width="184" height="1"/>
+			</line>
+			<line>
+				<reportElement positionType="Float" x="371" y="43" width="184" height="1"/>
+			</line>
+			<staticText>
+				<reportElement positionType="Float" x="425" y="20" width="23" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="12" isBold="true" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Rp.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="425" y="2" width="23" height="17"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="false" pdfFontName="Helvetica" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Rp.]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true" hyperlinkType="None">
+				<reportElement positionType="Float" x="338" y="79" width="214" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" isBold="false" pdfFontName="Helvetica" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Tgl Cetak : " + $P{REPORT_SCRIPTLET}.convertDateToString(new Date(), "dd/MM/yyyy")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="135" y="34" width="76" height="15"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="10" pdfFontName="Helvetica" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Diterima Oleh,]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="135" y="49" width="76" height="15"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="10" pdfFontName="Helvetica" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Nama : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="135" y="64" width="76" height="15"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="10" pdfFontName="Helvetica" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Tgl : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="135" y="79" width="76" height="15"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="10" pdfFontName="Helvetica" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Stempel : ]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true" hyperlinkType="None">
+				<reportElement positionType="Float" x="338" y="44" width="214" height="35"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom" markup="none">
+					<font fontName="SansSerif" pdfFontName="Helvetica" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Page " + $V{PAGE_NUMBER} + " of " + $V{PAGE_COUNT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>
