@@ -32,14 +32,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.jolbox.bonecp.BoneCPDataSource;
 import com.sma.model.DropDown;
 import com.sma.model.User;
 import com.sma.utils.Utils;
+import com.zaxxer.hikari.HikariDataSource;
 
 /**
  * Report Controller
- * 
+ * Test Comment
+ * Tambah Comment
  * @author Yusuf
  * @since Jun 26, 2013 (8:48:58 AM)
  *
@@ -49,7 +50,7 @@ import com.sma.utils.Utils;
 public class ReportController extends ParentController{
 	
 	@Autowired
-	private BoneCPDataSource dbDataSource;
+	private HikariDataSource dbDataSource;
 	
 	private Connection connection;
 	

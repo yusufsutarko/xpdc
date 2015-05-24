@@ -28,7 +28,9 @@ import com.sma.model.Harga;
 import com.sma.model.User;
 
 /**
- * Master Harga
+ * Master Harga - CRUD
+ * 
+ * Tambah comment (contoh)
  * 
  * @author Rudy
  * @since Jun 26, 2013 (1:59:02 PM)

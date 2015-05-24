@@ -6,7 +6,7 @@
 <%@ include file="/WEB-INF/jsp/include_head.jsp"%>
 <style type="text/css">
 body {
-	background-image: url("static/logo.png");
+	background-image: url("static/logo_bca_life.png");
 	background-repeat: repeat;
 	background-position: center center;
 }

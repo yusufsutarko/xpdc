@@ -43,10 +43,11 @@
 			<when test="id != null">WHERE u.id = #{id}</when>
 		</choose>
 		<if test="password != null">
-			AND u.password = AES_ENCRYPT(#{password}, 'suksesmakmurangkutan')
+			AND u.password = #{password}
 		</if>
 	</select>
-	
+	<!-- 			AND u.password = AES_ENCRYPT(#{password}, 'suksesmakmurangkutan') -->
+		
 	<select id="selectListUser" resultType="User">
 		SELECT * FROM lst_user 
 		<if test="search != null">

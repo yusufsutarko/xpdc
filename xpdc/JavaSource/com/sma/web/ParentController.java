@@ -25,6 +25,8 @@ import com.sma.utils.Utils;
  * Abstract ParentController sebagai parent dari semua controller
  * Cuman untuk meletakkan reference data saja dan beberapa variable
  * 
+ * contoh comment
+ * 
  * @author Yusuf
  * @since Jun 20, 2013 (10:15:06 AM)
  *

@@ -28,7 +28,7 @@ import com.sma.model.Menu;
 import com.sma.model.User;
 
 /**
- * Master Menu
+ * Master Menu - CRUD
  * 
  * @author Rudy
  * @since Jun 30, 2013 (1:59:02 PM)
@@ -42,6 +42,7 @@ public class MasterMenuController extends ParentController {
 	//bisa lebih dari satu model attribute, bisa juga digunakan sebagai reference data
 	@ModelAttribute("reff")
 	public Map<String, Object> reff(){
+		
 		List<DropDown> listActive = new ArrayList<DropDown>();
 		listActive.add(new DropDown("1", "Aktif"));
 		listActive.add(new DropDown("0", "Tidak Aktif"));

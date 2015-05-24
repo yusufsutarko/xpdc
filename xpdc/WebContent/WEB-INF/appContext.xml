@@ -56,8 +56,35 @@
 	
 	<!-- ================================ KONEKSI DATABASE ================================ -->
 
-	<!-- Data Source (menggunakan connection pooling dari BoneCP) -->
-	<bean id="mysqlDataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close"
+	<!-- Data Source H2 (Conn Pool = HikariCP) -->
+	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+	    <property name="poolName" value="springHikariCP" />
+	    <property name="connectionTestQuery" value="SELECT 1" />
+	    <property name="dataSourceClassName" value="org.h2.jdbcx.JdbcDataSource" />
+	    <property name="maximumPoolSize" value="10" />
+	    <property name="idleTimeout" value="30000" />
+	    <property name="dataSourceProperties">
+	        <props>
+	            <prop key="url">jdbc:h2:/C:/java/xpdc</prop>
+	            <prop key="user"></prop>
+	            <prop key="password"></prop>
+	        </props>
+	    </property>
+	</bean>
+	<bean id="dbDataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+	    <constructor-arg ref="hikariConfig" />
+	</bean>
+
+	<!-- 
+	<bean id="dbDataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close"
+ 		p:driverClass="org.h2.Driver"
+ 		p:jdbcUrl="jdbc:h2:/C:/java/xpdc"
+ 		p:username=""
+ 		p:password="" />
+	 -->
+	 
+	<!-- Data Source MySQL (Conn Pool = BoneCP)
+	<bean id="dbDataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close"
  		p:driverClass="com.mysql.jdbc.Driver"
  		p:jdbcUrl="jdbc:mysql://localhost:3306/ekspedisi?autoReconnect=true"
  		p:username="dev"
@@ -70,29 +97,30 @@
  		p:acquireIncrement="5"
  		p:statementsCacheSize="100"
  		p:releaseHelperThreads="3" />
-
+	-->
+	
 	<!-- Spring transaction manager -->
- 	<bean id="mysqlTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" 
-		p:dataSource-ref="mysqlDataSource" /> 
+ 	<bean id="dbTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" 
+		p:dataSource-ref="dbDataSource" /> 
 
 	<!-- Service object yang bersifat transactional --> 
-	<bean id="mysqlService" class="com.sma.service.DbService" /> 
+	<bean id="dbService" class="com.sma.service.DbService" /> 
 
 	<!-- enable transaction demarcation with annotations --> 
-	<tx:annotation-driven transaction-manager="mysqlTransactionManager"/> 
+	<tx:annotation-driven transaction-manager="dbTransactionManager"/> 
 
 	<!-- MyBatis session factory -->
 	<!-- p:mapperLocations = lokasi sql map -->
 	<!-- p:typeAliasesPackage = semua domain object yang ada disini sudah tidak perlu didefine satu per satu di sql map -->
-	<bean id="mysqlSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean"
-		p:dataSource-ref="mysqlDataSource"
+	<bean id="dbSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean"
+		p:dataSource-ref="dbDataSource"
 		p:mapperLocations="classpath*:com/sma/persistence/**/*.xml"
 		p:typeAliasesPackage="com.sma.model" />
 
 	<!-- scan for mappers and let them be autowired --> 
 	<!-- p:basePackage = scan semua mapper disini -->
-	<bean id="mysqlMapperScanner" class="org.mybatis.spring.mapper.MapperScannerConfigurer" 
+	<bean id="dbMapperScanner" class="org.mybatis.spring.mapper.MapperScannerConfigurer" 
 		p:basePackage="com.sma.persistence"
-		p:sqlSessionFactory-ref="mysqlSqlSessionFactory" />
+		p:sqlSessionFactory-ref="dbSqlSessionFactory" />
 	
 </beans>

@@ -7,13 +7,16 @@
 	<update id="updateTestDB" parameterType="int">
 		UPDATE mst_master SET jenis = #{value} WHERE id = 0
 	</update>
-	
+
+	<!-- 
+			<if test="password != null">password = AES_ENCRYPT(#{password},'suksesmakmurangkutan'),</if>
+	 -->	
 	<update id="updateUser" parameterType="User">
 		UPDATE lst_user
 		<set>
 			<if test="cabang_id != null">cabang_id = #{cabang_id},</if>
 			<if test="username != null">username = #{username},</if>
-			<if test="password != null">password = AES_ENCRYPT(#{password},'suksesmakmurangkutan'),</if>
+			<if test="password != null">password = #{password},</if>
 			<if test="group_user_id != null">group_user_id = #{group_user_id},</if>
 			<if test="flag_approval != null">flag_approval = #{flag_approval},</if>
 			<if test="flag_akses_all != null">flag_akses_all = #{flag_akses_all},</if>
