@@ -17,7 +17,11 @@ ${sessionScope.currentUser.menuAkses}
 		<h3>${company.name}</h3>
 		<p>${company.address}</p>
 		<h3>Informasi Login</h3>
-		<p>Anda login sebagai <strong>${sessionScope.currentUser.username}</strong> sejak <strong><fmt:formatDate value="${sessionScope.currentUser.lastlogin}" pattern="dd-MM-yyyy (HH:mm:ss)"/></strong></p>
+		<p>
+			Anda login sebagai <strong>${sessionScope.currentUser.username}</strong> sejak 
+			<strong><fmt:formatDate value="${sessionScope.currentUser.lastlogin}" pattern="dd-MM-yyyy (HH:mm:ss)"/></strong>
+			<br/><br/><a href="${path}/upload">Contoh Upload</a>
+		</p>
 	</div>
 </div>
 

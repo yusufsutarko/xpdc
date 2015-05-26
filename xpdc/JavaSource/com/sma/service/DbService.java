@@ -1,5 +1,7 @@
 package com.sma.service;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -9,9 +11,14 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.annotations.Param;
 import org.apache.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.sma.model.Barang;
 import com.sma.model.Biaya;
@@ -31,6 +38,7 @@ import com.sma.model.Payment;
 import com.sma.model.Supir;
 import com.sma.model.Trans;
 import com.sma.model.TransDet;
+import com.sma.model.Upload;
 import com.sma.model.User;
 import com.sma.persistence.DbMapper;
 import com.sma.utils.SessionRegistry;
@@ -798,6 +806,59 @@ public class DbService {
 	
 	public Integer selectValidasiItemSTTSudahNaikRBT(TransDet det){
 		return dbMapper.selectValidasiItemSTTSudahNaikRBT(det);
+	}
+	
+	public String uploadFile(Upload upload) throws IOException{
+		CommonsMultipartFile file = upload.getFile();
+        ByteArrayInputStream bis = new ByteArrayInputStream(file.getBytes());
+        Workbook workbook;
+        
+        if(file.isEmpty()){
+            return "Upload failed (empty)";
+        }else if (file.getOriginalFilename().endsWith("xls")) {
+            workbook = new HSSFWorkbook(bis);
+        }else if (file.getOriginalFilename().endsWith("xlsx")) {
+            workbook = new XSSFWorkbook(bis);
+        }else {
+            throw new IllegalArgumentException("Received file does not have a standard excel extension.");
+        }
+
+        for (Row row : workbook.getSheetAt(0)) {
+        	if(row.getRowNum() < 10) {
+        		System.out.println("Row " + row.getRowNum() + " = " + row.getCell(0).getStringCellValue());
+        	}
+        	/*
+			if (row.getRowNum() == 0) {
+				Iterator<Cell> cellIterator = row.cellIterator();
+				while (cellIterator.hasNext()) {
+					Cell cell = cellIterator.next();
+					System.out.println(cell.getStringCellValue());
+				}
+			}
+			*/
+        }
+        
+        workbook.close();
+        
+        return "Upload Success";
+
+        /*
+        if (!file.isEmpty()) {
+            try {
+                byte[] bytes = file.getBytes();
+                BufferedOutputStream stream = 
+                        new BufferedOutputStream(new FileOutputStream(new File(name)));
+                stream.write(bytes);
+                stream.close();
+                return "You successfully uploaded " + name + "!";
+            } catch (Exception e) {
+                return "You failed to upload " + name + " => " + e.getMessage();
+            }
+        } else {
+            return "You failed to upload " + name + " because the file was empty.";
+        }
+        */
+
 	}
 	
 }

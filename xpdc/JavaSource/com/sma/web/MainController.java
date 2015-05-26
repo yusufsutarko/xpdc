@@ -1,5 +1,7 @@
 package com.sma.web;
 
+import java.io.IOException;
+
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
@@ -10,8 +12,10 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.sma.model.Upload;
 import com.sma.model.User;
 
 /**
@@ -101,5 +105,21 @@ public class MainController extends ParentController{
 		return "loading";
 	}
 	
+    @RequestMapping(value="/upload")
+    public String handleFileUpload(HttpServletRequest request, @ModelAttribute("upload") Upload upload, 
+    		BindingResult result, RedirectAttributes ra) throws IOException{
+		logger.debug("Halaman: UPLOAD");
+
+		if(upload.getFile() != null){
+			String pesan = dbService.uploadFile(upload);
+			//bila tidak ada error simpan data disini, lalu kembalikan ke layar list input, letakkan pesan di flash attribute nya spring
+			//flash attribute berguna untuk mengirimkan pesan (contohnya pesan sukses/error setelah save) 
+			//ke layar berikutnya (hanya sampai di layar berikutnya, setelah itu hilang)
+			ra.addFlashAttribute("pesan", pesan);
+			return "redirect:/upload";
+		}
+		
+		return "upload";
+    }
 
 }

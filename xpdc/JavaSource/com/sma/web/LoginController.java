@@ -56,7 +56,7 @@ public class LoginController extends ParentController{
 		//validasi dasar di model object, validasi lainnya langsung didalam controller
 		if (!result.hasErrors()) {
 			BindException errors = new BindException(result);
-			User tmp = dbService.selectUser(null, user.getUsername(), user.getPassword());
+			User tmp = dbService.selectUser(null, user.getUsername().toUpperCase(), user.getPassword());
 			
 			if(tmp == null) {
 				errors.rejectValue("username", "", "Username tidak terdaftar atau password salah");
